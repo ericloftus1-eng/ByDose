@@ -28,19 +28,31 @@ export default function Home() {
       timers.add(id);
     };
     let wordIndex = 0;
+    let introComplete = false;
+    const showWord = (word) => {
+      setText(word);
+      setRevealing(true);
+      later(() => { setRevealing(false); setText("DOSE"); }, 2400);
+    };
     const breathe = () => {
       if (!document.hidden && !motion.matches) {
         setPulse(true);
         later(() => setPulse(false), 1400);
+        if (introComplete && Math.random() < 0.08) {
+          showWord(words[Math.floor(Math.random() * words.length)]);
+        }
       }
-      later(breathe, 3000);
+      later(breathe, introComplete ? 8000 + Math.random() * 2000 : 3000);
     };
     const reveal = () => {
       if (!document.hidden && !motion.matches) {
-        setText(words[wordIndex]);
-        wordIndex = (wordIndex + 1) % words.length;
-        setRevealing(true);
-        later(() => { setRevealing(false); setText("DOSE"); }, 2400);
+        showWord(words[wordIndex]);
+        wordIndex += 1;
+        if (wordIndex === words.length) {
+          // Let ENLIGHTENMENT finish approaching before entering the calm phase.
+          later(() => { introComplete = true; }, 2400);
+          return;
+        }
       }
       later(reveal, 5000);
     };
