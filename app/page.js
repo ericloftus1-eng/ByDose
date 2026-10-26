@@ -17,7 +17,7 @@ const star = Array.from({ length: 16 }, (_, i) => point(i % 2 ? 63 : 128, -Math.
 export default function Home() {
   const scene = useRef(null);
   const [text, setText] = useState("DOSE");
-  const [visible, setVisible] = useState(true);
+  const [revealing, setRevealing] = useState(false);
   const [pulse, setPulse] = useState(false);
 
   useEffect(() => {
@@ -32,15 +32,9 @@ export default function Home() {
         setPulse(true);
         later(() => setPulse(false), 3200);
         if (Math.random() < 0.08) {
-          setVisible(false);
-          later(() => {
-            setText(words[Math.floor(Math.random() * words.length)]);
-            setVisible(true);
-            later(() => {
-              setVisible(false);
-              later(() => { setText("DOSE"); setVisible(true); }, 650);
-            }, 2000);
-          }, 650);
+          setText(words[Math.floor(Math.random() * words.length)]);
+          setRevealing(true);
+          later(() => { setRevealing(false); setText("DOSE"); }, 2400);
         }
       }
       later(breathe, 8000 + Math.random() * 2000);
@@ -120,14 +114,14 @@ export default function Home() {
           </svg>
         </div>
       </div>
-      <h1 aria-label="DOSE"><span className={`word ${visible ? "" : "word-hidden"} ${text === "DOSE" ? "" : "word-reveal"}`} aria-hidden="true">
+      <h1 aria-label="DOSE"><span className={`word ${revealing ? "word-approach" : ""}`} aria-hidden="true">
         <svg className="lettering" viewBox="0 0 740 190" role="presentation">
           <defs>
             <linearGradient id="letter-gold" x1="0" y1="0" x2="20%" y2="100%">
               <stop stopColor="#fff6d6" /><stop offset=".25" stopColor="#e9bb60" /><stop offset=".42" stopColor="#8b591d" /><stop offset=".48" stopColor="#523015" /><stop offset=".56" stopColor="#ffe9a1" /><stop offset=".76" stopColor="#a36e29" /><stop offset=".87" stopColor="#6d391e" /><stop offset="1" stopColor="#fff0bd" />
             </linearGradient>
           </defs>
-          <text x="370" y="141" textAnchor="middle" fill="url(#letter-gold)" stroke="#f6d48a" strokeWidth=".55" fontSize={text === "DOSE" ? "166" : "62"} letterSpacing={text === "DOSE" ? "3" : "4"}>{text}</text>
+          <text x="370" y="141" textAnchor="middle" fill="url(#letter-gold)" stroke="#f6d48a" strokeWidth=".55" fontSize={text === "DOSE" ? "166" : text.length > 10 ? "88" : text.length > 7 ? "100" : "150"} letterSpacing={text === "DOSE" ? "3" : "4"}>{text}</text>
         </svg>
       </span></h1>
     </main>
