@@ -73,11 +73,20 @@ export default function Home() {
             <g className="rings">
               {[330, 345, 385, 393].map(radius => <circle key={radius} r={radius} />)}
             </g>
+            <g className="fine-rings">
+              {[205, 222, 278, 302, 318].map(radius => <circle key={radius} r={radius} />)}
+            </g>
+            <g className="triangles">
+              <polygon points="0,-315 273,158 -273,158" />
+              <polygon points="0,315 -273,-158 273,-158" />
+            </g>
             <circle className="dotted-ring" r="363" strokeDasharray="1 11" strokeLinecap="round" />
             <g className="ornaments">
               {[-1, 1].map(sign => <g key={sign}>
                 <circle cy={sign * 270} r="91" />
                 <circle cy={sign * 294} r="27" />
+                <circle cy={sign * 211} r="43" />
+                <circle cy={sign * 398} r="4" />
                 <circle cy={sign * 370} r="12" />
                 <circle cx={sign * 365} r="20" />
                 <circle cx={sign * 401} r="8" />
@@ -95,8 +104,9 @@ export default function Home() {
             <polygon className="star" points={star} />
             <circle className="core" r="145" />
             <g className="sparks" stroke="none">
-              {[...hexagon(260), [0, -260], [0, 260], [0, -370], [0, 370], [-365, 0], [365, 0], [0, 0]].map(([x, y], i) => <g key={i} transform={`translate(${x} ${y})`}>
-                <circle r="20" fill="url(#spark)" />
+              {[...hexagon(260), [0, -260], [0, 260], [0, -370], [0, 370], [-365, 0], [365, 0], [0, -168], [0, 168], [0, -211], [0, 211], [0, -315], [0, 315], [0, 0]].map(([x, y], i) => <g key={i} transform={`translate(${x} ${y})`}>
+                <circle r="30" fill="url(#spark)" />
+                <path d="M-25 0H25M0-25V25" stroke="#e6b64c" strokeWidth=".25" />
                 <path d="M-15 0H15M0-15V15" stroke="#ffe7ab" strokeWidth=".55" />
                 <circle r="1.7" fill="#fff5d4" />
               </g>)}
@@ -104,7 +114,16 @@ export default function Home() {
           </svg>
         </div>
       </div>
-      <h1 aria-label="DOSE"><span className={`word ${visible ? "" : "word-hidden"} ${text === "DOSE" ? "" : "word-reveal"}`} aria-hidden="true">{text}</span></h1>
+      <h1 aria-label="DOSE"><span className={`word ${visible ? "" : "word-hidden"} ${text === "DOSE" ? "" : "word-reveal"}`} aria-hidden="true">
+        <svg className="lettering" viewBox="0 0 740 190" role="presentation">
+          <defs>
+            <linearGradient id="letter-gold" x1="0" y1="0" x2="0.2" y2="1">
+              <stop stopColor="#fff6d6" /><stop offset=".25" stopColor="#e9bb60" /><stop offset=".48" stopColor="#b47e29" /><stop offset=".56" stopColor="#ffe9a1" /><stop offset=".8" stopColor="#d4a54c" /><stop offset="1" stopColor="#fff0bd" />
+            </linearGradient>
+          </defs>
+          <text x="370" y="141" textAnchor="middle" fill="url(#letter-gold)" stroke="#f6d48a" strokeWidth=".55" fontSize={text === "DOSE" ? "166" : "62"} letterSpacing={text === "DOSE" ? "3" : "4"}>{text}</text>
+        </svg>
+      </span></h1>
     </main>
   );
 }
