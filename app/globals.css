@@ -93,3 +93,20 @@ h1::before { width: 108%; height: 110%; background: radial-gradient(ellipse, #05
 .flower { filter: drop-shadow(-1px -1px 2px #75438c38) drop-shadow(1px 1px 2px #8c2d3830); }
 .rings { filter: drop-shadow(0 1px 2px #6d361d60); }
 .lettering { filter: drop-shadow(0 1px 0 #70421c) drop-shadow(0 2px 1px #35190f) drop-shadow(-2px 0 5px #78478c25) drop-shadow(2px 1px 5px #a1323220); }
+
+/* Sculpted layers, richer jewel-tone reflections, and softer separate letters. */
+.geometry { stroke-width: 1.5; }
+.rings { stroke-width: 1.5; filter: drop-shadow(0 2px 1px #66370e) drop-shadow(-2px 0 5px #864ba060) drop-shadow(2px 1px 5px #a42f3e50); }
+.flower { stroke-width: 1.35; opacity: .82; filter: drop-shadow(0 1px 1px #5a3213) drop-shadow(-1.5px -1px 3px #9854bb70) drop-shadow(1.5px 1px 3px #ba354b65); }
+.cube { stroke-width: 1.2; stroke: #b18549; opacity: .8; }
+.fine-rings { stroke-width: 1; opacity: .75; }
+.triangles { stroke-width: 1.5; filter: drop-shadow(0 2px 1px #50240f); }
+.ornaments { stroke-width: 1.6; }
+.star { stroke-width: 1.6; }
+.experience::before {
+  background:
+    radial-gradient(ellipse at 34% 37%, #692c892e, transparent 38%),
+    radial-gradient(ellipse at 67% 65%, #921f3329, transparent 37%);
+}
+.lettering { font-family: "Palatino Linotype", "Book Antiqua", Palatino, "Baskerville", Georgia, serif; filter: drop-shadow(0 1px 0 #94632c) drop-shadow(0 3px 1px #48220e) drop-shadow(0 5px 3px #170b06) drop-shadow(-3px -1px 6px #a15cc052) drop-shadow(3px 2px 6px #b9364548); }
+.lettering text { font-weight: 400; font-style: italic; stroke-width: .95; stroke-linejoin: round; letter-spacing: 7px; }
