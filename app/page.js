@@ -27,19 +27,25 @@ export default function Home() {
       const id = setTimeout(() => { timers.delete(id); fn(); }, delay);
       timers.add(id);
     };
+    let wordIndex = 0;
     const breathe = () => {
       if (!document.hidden && !motion.matches) {
         setPulse(true);
-        later(() => setPulse(false), 3200);
-        if (Math.random() < 0.08) {
-          setText(words[Math.floor(Math.random() * words.length)]);
-          setRevealing(true);
-          later(() => { setRevealing(false); setText("DOSE"); }, 2400);
-        }
+        later(() => setPulse(false), 1400);
       }
-      later(breathe, 8000 + Math.random() * 2000);
+      later(breathe, 3000);
     };
-    later(breathe, 9000);
+    const reveal = () => {
+      if (!document.hidden && !motion.matches) {
+        setText(words[wordIndex]);
+        wordIndex = (wordIndex + 1) % words.length;
+        setRevealing(true);
+        later(() => { setRevealing(false); setText("DOSE"); }, 2400);
+      }
+      later(reveal, 5000);
+    };
+    later(breathe, 3000);
+    later(reveal, 5000);
     return () => timers.forEach(clearTimeout);
   }, []);
 
@@ -59,7 +65,7 @@ export default function Home() {
     <main className={`experience ${pulse ? "is-breathing" : ""}`} onPointerMove={move} onPointerLeave={reset}>
       <div className="parallax" ref={scene} aria-hidden="true">
         <div className="breath">
-          <svg className="geometry" viewBox="-420 -420 840 840" fill="none">
+          <svg className="geometry" viewBox="-460 -460 920 920" fill="none">
             <defs>
               <radialGradient id="spark"><stop stopColor="#fff8dc" /><stop offset=".15" stopColor="#ffe6a0" stopOpacity=".9" /><stop offset="1" stopColor="#d4af37" stopOpacity="0" /></radialGradient>
               <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop stopColor="#fff0bb" /><stop offset=".45" stopColor="#d4af37" /><stop offset=".65" stopColor="#fff1c4" /><stop offset="1" stopColor="#b67c25" /></linearGradient>
@@ -108,9 +114,15 @@ export default function Home() {
                 <path d="M0-23 1.6-2 23 0 1.6 2 0 23-1.6 2-23 0-1.6-2Z" fill="#f5cf85" />
                 <path d="M-10-10 0-1 10-10 1 0 10 10 0 1-10 10-1 0Z" fill="#bc843c" />
                 <path d="M-13-4 A14 14 0 0 1 12-7 M13 4 A14 14 0 0 1-12 7" fill="none" stroke="#c99349" strokeWidth=".65" />
-                <path d="M-25 0H25M0-25V25" stroke="#e6b64c" strokeWidth=".25" />
+                <path d="M-45 0H45M0-45V45" stroke="#e6b64c" strokeWidth=".25" />
                 <path d="M-15 0H15M0-15V15" stroke="#ffe7ab" strokeWidth=".55" />
-                <circle r="1.7" fill="#fff5d4" />
+                <circle r="2.2" fill="#fff5d4" />
+                {[[-45, 0], [45, 0], [0, -45], [0, 45]].map(([dx, dy], k) => <g key={k} transform={`translate(${dx} ${dy})`}>
+                  <path d="M-12 0H12M0-12V12" stroke="#f5ce79" strokeWidth=".65" />
+                  <path d="M0-9 1-1 9 0 1 1 0 9-1 1-9 0-1-1Z" fill="#ffe3a3" />
+                  <circle r="1.5" fill="#fff6d8" />
+                  <path d="M-8-3 A9 9 0 0 1 8-4 M8 3 A9 9 0 0 1-8 4" fill="none" stroke="#e4ac54" strokeWidth=".8" />
+                </g>)}
               </g>)}
             </g>
           </svg>
