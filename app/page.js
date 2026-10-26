@@ -66,8 +66,24 @@ export default function Home() {
       <div className="parallax" ref={scene} aria-hidden="true">
         <div className="breath">
           <svg className="geometry" viewBox="-420 -420 840 840" fill="none">
+            <defs>
+              <radialGradient id="spark"><stop stopColor="#fff8dc" /><stop offset=".15" stopColor="#ffe6a0" stopOpacity=".9" /><stop offset="1" stopColor="#d4af37" stopOpacity="0" /></radialGradient>
+              <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop stopColor="#fff0bb" /><stop offset=".45" stopColor="#d4af37" /><stop offset=".65" stopColor="#fff1c4" /><stop offset="1" stopColor="#b67c25" /></linearGradient>
+            </defs>
             <g className="rings">
               {[330, 345, 385, 393].map(radius => <circle key={radius} r={radius} />)}
+            </g>
+            <circle className="dotted-ring" r="363" strokeDasharray="1 11" strokeLinecap="round" />
+            <g className="ornaments">
+              {[-1, 1].map(sign => <g key={sign}>
+                <circle cy={sign * 270} r="91" />
+                <circle cy={sign * 294} r="27" />
+                <circle cy={sign * 370} r="12" />
+                <circle cx={sign * 365} r="20" />
+                <circle cx={sign * 401} r="8" />
+              </g>)}
+              <line x1="0" y1="-412" x2="0" y2="412" />
+              <line x1="-412" y1="0" x2="412" y2="0" />
             </g>
             <g className="flower">
               {flower.map(([x, y], i) => <circle key={i} cx={x} cy={y} r="130" />)}
@@ -78,6 +94,13 @@ export default function Home() {
             </g>
             <polygon className="star" points={star} />
             <circle className="core" r="145" />
+            <g className="sparks" stroke="none">
+              {[...hexagon(260), [0, -260], [0, 260], [0, -370], [0, 370], [-365, 0], [365, 0], [0, 0]].map(([x, y], i) => <g key={i} transform={`translate(${x} ${y})`}>
+                <circle r="20" fill="url(#spark)" />
+                <path d="M-15 0H15M0-15V15" stroke="#ffe7ab" strokeWidth=".55" />
+                <circle r="1.7" fill="#fff5d4" />
+              </g>)}
+            </g>
           </svg>
         </div>
       </div>

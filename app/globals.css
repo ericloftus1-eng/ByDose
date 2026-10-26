@@ -38,3 +38,16 @@ h1::before { content: ""; position: absolute; width: min(68vw, 440px); height: 1
   .geometry { animation: none; }
   .parallax, .breath, .word { transition: none; }
 }
+
+/* Warm, luminous detailing inspired by the supplied art direction. */
+.geometry { stroke: #e7bd68; stroke-width: .8; }
+.rings { opacity: .7; }
+.flower { opacity: .43; stroke-width: .7; }
+.cube { opacity: .38; stroke-width: .65; }
+.ornaments { opacity: .8; stroke-width: .8; }
+.dotted-ring { opacity: .7; stroke-width: 1.4; }
+.breath { filter: brightness(1) drop-shadow(0 0 2px #e8b94d70) drop-shadow(0 0 12px #d4af3728); }
+.is-breathing .breath { filter: brightness(1.15) drop-shadow(0 0 2.3px #e8b94d80) drop-shadow(0 0 13.8px #d4af3730); }
+h1 { font-size: clamp(4rem, 16vw, 10rem); letter-spacing: .025em; text-indent: .025em; }
+.word { color: #e9c374; background: linear-gradient(180deg, #fff2c6 5%, #d5a64c 37%, #fff0b5 54%, #c18b32 80%, #f7d995); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 2px #f4cf8280) drop-shadow(0 0 15px #d4af3745); }
+h1::before { width: min(78vw, 640px); height: 125%; }
