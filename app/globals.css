@@ -61,3 +61,20 @@ h1 { width: min(80vw, 79svh, 840px); }
 .word { display: block; width: 100%; background: none; -webkit-text-fill-color: initial; }
 .lettering { display: block; width: 100%; height: auto; overflow: visible; font-family: "Baskerville", "Times New Roman", serif; }
 h1::before { width: 108%; height: 110%; background: radial-gradient(ellipse, #050505df 10%, #05050588 42%, transparent 72%); }
+
+/* Stronger luminous gold and more legible linework. */
+.geometry { stroke: #f2cd7d; stroke-width: 1.15; }
+.rings { opacity: .92; }
+.flower { opacity: .72; stroke-width: 1; }
+.cube { opacity: .62; stroke-width: .9; }
+.fine-rings { opacity: .42; stroke-width: .75; }
+.triangles { opacity: .78; stroke-width: 1.15; }
+.ornaments { opacity: .95; stroke: #ffe1a0; stroke-width: 1.2; }
+.dotted-ring { opacity: .95; stroke-width: 1.9; }
+.star { opacity: .82; stroke-width: 1.2; }
+.core { opacity: .6; }
+.breath { filter: brightness(1.12) drop-shadow(0 0 3px #efc56c90) drop-shadow(0 0 15px #d4af3740); }
+.is-breathing .breath { filter: brightness(1.288) drop-shadow(0 0 3.45px #efc56ca6) drop-shadow(0 0 17.25px #d4af374a); }
+.lettering text { stroke: #ffe6a9; stroke-width: 1.25; font-weight: 500; }
+.word { filter: brightness(1.12) drop-shadow(0 0 3px #ffdb8ea0) drop-shadow(0 0 18px #e6b64c65); }
+.is-breathing .word { filter: brightness(1.288) drop-shadow(0 0 3.45px #ffdb8eb8) drop-shadow(0 0 20.7px #e6b64c74); }
