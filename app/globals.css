@@ -146,3 +146,28 @@ h1::before { width: 108%; height: 110%; background: radial-gradient(ellipse, #05
   100% { transform: scale(2.4); opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) { .word-approach { animation: none; } }
+
+/* Rich cast gold, bronze recesses, and sharply drawn diffraction spikes. */
+.geometry { stroke: #bd8b3d; }
+.rings { stroke: #ce9d50; }
+.flower { stroke: #bb883f; }
+.cube { stroke: #815024; opacity: .95; }
+.fine-rings { stroke: #713b2b; opacity: .9; }
+.reference-petals { stroke: #b78140; }
+.triangles { stroke: #b27e36; }
+.ornaments { stroke: #d6a653; }
+.star { stroke: #d3a253; }
+.core { stroke: #774260; opacity: .95; }
+.dotted-ring { stroke: #c49449; }
+.breath { filter: brightness(1); }
+.is-breathing .breath { filter: brightness(1.4); }
+.word { filter: none; }
+.is-breathing .word { filter: brightness(1.3); }
+.lettering text { stroke: #ce9b50; }
+.experience::before {
+  background:
+    radial-gradient(ellipse at 34% 37%, #69298260, transparent 42%),
+    radial-gradient(ellipse at 67% 65%, #8e243a55, transparent 41%),
+    radial-gradient(ellipse at center, #48251138, transparent 55%);
+}
+.sparks { filter: none; }

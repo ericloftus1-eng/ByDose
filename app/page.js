@@ -105,7 +105,9 @@ export default function Home() {
             </g>
             <g className="sparks" stroke="none">
               {[...hexagon(260), [0, -260], [0, 260], [0, -370], [0, 370], [-365, 0], [365, 0], [0, -168], [0, 168], [0, -211], [0, 211], [0, -315], [0, 315], [0, 0]].map(([x, y], i) => <g key={i} transform={`translate(${x} ${y})`}>
-                <circle r="30" fill="url(#spark)" />
+                <path d="M0-23 1.6-2 23 0 1.6 2 0 23-1.6 2-23 0-1.6-2Z" fill="#f5cf85" />
+                <path d="M-10-10 0-1 10-10 1 0 10 10 0 1-10 10-1 0Z" fill="#bc843c" />
+                <path d="M-13-4 A14 14 0 0 1 12-7 M13 4 A14 14 0 0 1-12 7" fill="none" stroke="#c99349" strokeWidth=".65" />
                 <path d="M-25 0H25M0-25V25" stroke="#e6b64c" strokeWidth=".25" />
                 <path d="M-15 0H15M0-15V15" stroke="#ffe7ab" strokeWidth=".55" />
                 <circle r="1.7" fill="#fff5d4" />
@@ -118,7 +120,7 @@ export default function Home() {
         <svg className="lettering" viewBox="0 0 740 190" role="presentation">
           <defs>
             <linearGradient id="letter-gold" x1="0" y1="0" x2="20%" y2="100%">
-              <stop stopColor="#fff6d6" /><stop offset=".25" stopColor="#e9bb60" /><stop offset=".42" stopColor="#8b591d" /><stop offset=".48" stopColor="#523015" /><stop offset=".56" stopColor="#ffe9a1" /><stop offset=".76" stopColor="#a36e29" /><stop offset=".87" stopColor="#6d391e" /><stop offset="1" stopColor="#fff0bd" />
+              <stop stopColor="#dfb86c" /><stop offset=".25" stopColor="#b98635" /><stop offset=".42" stopColor="#8b591d" /><stop offset=".48" stopColor="#523015" /><stop offset=".56" stopColor="#e6bc70" /><stop offset=".76" stopColor="#a36e29" /><stop offset=".87" stopColor="#6d391e" /><stop offset="1" stopColor="#bb843b" />
             </linearGradient>
           </defs>
           <text x="370" y="141" textAnchor="middle" fill="url(#letter-gold)" stroke="#f6d48a" strokeWidth=".55" fontSize={text === "DOSE" ? "166" : text.length > 10 ? "88" : text.length > 7 ? "100" : "150"} letterSpacing={text === "DOSE" ? "3" : "4"}>{text}</text>
