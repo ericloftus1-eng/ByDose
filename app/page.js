@@ -73,6 +73,9 @@ export default function Home() {
             <g className="rings">
               {[330, 345, 385, 393].map(radius => <circle key={radius} r={radius} />)}
             </g>
+            <g className="reference-petals">
+              {Array.from({ length: 6 }, (_, i) => <ellipse key={i} cx="0" cy="-115" rx="91" ry="164" transform={`rotate(${i * 60})`} />)}
+            </g>
             <g className="fine-rings">
               {[205, 222, 278, 302, 318].map(radius => <circle key={radius} r={radius} />)}
             </g>
@@ -103,6 +106,9 @@ export default function Home() {
             </g>
             <polygon className="star" points={star} />
             <circle className="core" r="145" />
+            <g className="axis-beads">
+              {[-1, 1].flatMap(sign => [40, 80, 120, 160, 200, 240, 280, 320, 400].map(distance => <circle key={`${sign}-${distance}`} cy={sign * distance} r={distance % 80 === 0 ? 2 : 1} fill="#ffe6a0" stroke="none" />))}
+            </g>
             <g className="sparks" stroke="none">
               {[...hexagon(260), [0, -260], [0, 260], [0, -370], [0, 370], [-365, 0], [365, 0], [0, -168], [0, 168], [0, -211], [0, 211], [0, -315], [0, 315], [0, 0]].map(([x, y], i) => <g key={i} transform={`translate(${x} ${y})`}>
                 <circle r="30" fill="url(#spark)" />
@@ -117,7 +123,7 @@ export default function Home() {
       <h1 aria-label="DOSE"><span className={`word ${visible ? "" : "word-hidden"} ${text === "DOSE" ? "" : "word-reveal"}`} aria-hidden="true">
         <svg className="lettering" viewBox="0 0 740 190" role="presentation">
           <defs>
-            <linearGradient id="letter-gold" x1="0" y1="0" x2="0.2" y2="1">
+            <linearGradient id="letter-gold" x1="0" y1="0" x2="20%" y2="100%">
               <stop stopColor="#fff6d6" /><stop offset=".25" stopColor="#e9bb60" /><stop offset=".42" stopColor="#8b591d" /><stop offset=".48" stopColor="#523015" /><stop offset=".56" stopColor="#ffe9a1" /><stop offset=".76" stopColor="#a36e29" /><stop offset=".87" stopColor="#6d391e" /><stop offset="1" stopColor="#fff0bd" />
             </linearGradient>
           </defs>

@@ -110,3 +110,17 @@ h1::before { width: 108%; height: 110%; background: radial-gradient(ellipse, #05
 }
 .lettering { font-family: "Palatino Linotype", "Book Antiqua", Palatino, "Baskerville", Georgia, serif; filter: drop-shadow(0 1px 0 #94632c) drop-shadow(0 3px 1px #48220e) drop-shadow(0 5px 3px #170b06) drop-shadow(-3px -1px 6px #a15cc052) drop-shadow(3px 2px 6px #b9364548); }
 .lettering text { font-weight: 400; font-style: italic; stroke-width: .95; stroke-linejoin: round; letter-spacing: 7px; }
+
+/* Reference-led composition: upright carved lettering over living SVG tracery. */
+.reference-petals { stroke: #e4b963; stroke-width: .85; opacity: .65; }
+.lettering text { font-family: "Baskerville", "Times New Roman", serif; font-style: normal; font-weight: 400; letter-spacing: 3px; stroke-width: .8; }
+.rings { stroke-width: 1; }
+.flower { stroke-width: .95; }
+.cube { stroke-width: .7; opacity: .52; }
+.fine-rings { stroke-width: .65; opacity: .48; }
+.ornaments { stroke-width: 1.1; }
+.triangles { stroke-width: 1; }
+.axis-beads { opacity: .85; }
+.sparks { animation: glimmer 9s ease-in-out infinite; }
+@keyframes glimmer { 0%, 100% { opacity: .7; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .sparks { animation: none; } }
