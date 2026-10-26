@@ -78,3 +78,18 @@ h1::before { width: 108%; height: 110%; background: radial-gradient(ellipse, #05
 .lettering text { stroke: #ffe6a9; stroke-width: 1.25; font-weight: 500; }
 .word { filter: brightness(1.12) drop-shadow(0 0 3px #ffdb8ea0) drop-shadow(0 0 18px #e6b64c65); }
 .is-breathing .word { filter: brightness(1.288) drop-shadow(0 0 3.45px #ffdb8eb8) drop-shadow(0 0 20.7px #e6b64c74); }
+
+/* Antique-gold recesses with restrained amethyst and oxblood undertones. */
+.experience::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: -1;
+  background:
+    radial-gradient(ellipse at 35% 39%, #43205a18, transparent 34%),
+    radial-gradient(ellipse at 66% 64%, #631e2815, transparent 33%);
+}
+.fine-rings { stroke: #906021; opacity: .65; }
+.cube { stroke: #a87532; opacity: .72; }
+.core { stroke: #9c6330; opacity: .75; }
+.triangles { stroke: #c3944d; }
+.flower { filter: drop-shadow(-1px -1px 2px #75438c38) drop-shadow(1px 1px 2px #8c2d3830); }
+.rings { filter: drop-shadow(0 1px 2px #6d361d60); }
+.lettering { filter: drop-shadow(0 1px 0 #70421c) drop-shadow(0 2px 1px #35190f) drop-shadow(-2px 0 5px #78478c25) drop-shadow(2px 1px 5px #a1323220); }

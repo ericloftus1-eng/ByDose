@@ -118,7 +118,7 @@ export default function Home() {
         <svg className="lettering" viewBox="0 0 740 190" role="presentation">
           <defs>
             <linearGradient id="letter-gold" x1="0" y1="0" x2="0.2" y2="1">
-              <stop stopColor="#fff6d6" /><stop offset=".25" stopColor="#e9bb60" /><stop offset=".48" stopColor="#b47e29" /><stop offset=".56" stopColor="#ffe9a1" /><stop offset=".8" stopColor="#d4a54c" /><stop offset="1" stopColor="#fff0bd" />
+              <stop stopColor="#fff6d6" /><stop offset=".25" stopColor="#e9bb60" /><stop offset=".42" stopColor="#8b591d" /><stop offset=".48" stopColor="#523015" /><stop offset=".56" stopColor="#ffe9a1" /><stop offset=".76" stopColor="#a36e29" /><stop offset=".87" stopColor="#6d391e" /><stop offset="1" stopColor="#fff0bd" />
             </linearGradient>
           </defs>
           <text x="370" y="141" textAnchor="middle" fill="url(#letter-gold)" stroke="#f6d48a" strokeWidth=".55" fontSize={text === "DOSE" ? "166" : "62"} letterSpacing={text === "DOSE" ? "3" : "4"}>{text}</text>
