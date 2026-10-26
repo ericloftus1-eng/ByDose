@@ -65,8 +65,10 @@ export default function Home() {
     <main className={`experience ${pulse ? "is-breathing" : ""}`} onPointerMove={move} onPointerLeave={reset}>
       <div className="parallax" ref={scene} aria-hidden="true">
         <div className="breath">
-          <svg className="geometry" viewBox="-460 -460 920 920" fill="none">
+          <svg className="geometry" viewBox="-670 -670 1340 1340" fill="none">
             <defs>
+              <radialGradient id="orb-metal" cx="30%" cy="25%" r="75%"><stop stopColor="#fff8dc" /><stop offset=".2" stopColor="#f3ca78" /><stop offset=".48" stopColor="#b77a2c" /><stop offset=".8" stopColor="#603016" /><stop offset="1" stopColor="#160c16" /></radialGradient>
+              <linearGradient id="ray-metal"><stop stopColor="#ffe7a8" /><stop offset=".45" stopColor="#ce963e" /><stop offset="1" stopColor="#9d455d" stopOpacity="0" /></linearGradient>
               <radialGradient id="spark"><stop stopColor="#fff8dc" /><stop offset=".15" stopColor="#ffe6a0" stopOpacity=".9" /><stop offset="1" stopColor="#d4af37" stopOpacity="0" /></radialGradient>
               <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop stopColor="#fff0bb" /><stop offset=".45" stopColor="#d4af37" /><stop offset=".65" stopColor="#fff1c4" /><stop offset="1" stopColor="#b67c25" /></linearGradient>
             </defs>
@@ -111,18 +113,14 @@ export default function Home() {
             </g>
             <g className="sparks" stroke="none">
               {[...hexagon(260), [0, -260], [0, 260], [0, -370], [0, 370], [-365, 0], [365, 0], [0, -168], [0, 168], [0, -211], [0, 211], [0, -315], [0, 315], [0, 0]].map(([x, y], i) => <g key={i} transform={`translate(${x} ${y})`}>
-                <path d="M0-23 1.6-2 23 0 1.6 2 0 23-1.6 2-23 0-1.6-2Z" fill="#f5cf85" />
-                <path d="M-10-10 0-1 10-10 1 0 10 10 0 1-10 10-1 0Z" fill="#bc843c" />
-                <path d="M-13-4 A14 14 0 0 1 12-7 M13 4 A14 14 0 0 1-12 7" fill="none" stroke="#c99349" strokeWidth=".65" />
-                <path d="M-45 0H45M0-45V45" stroke="#e6b64c" strokeWidth=".25" />
-                <path d="M-15 0H15M0-15V15" stroke="#ffe7ab" strokeWidth=".55" />
-                <circle r="2.2" fill="#fff5d4" />
-                {[[-45, 0], [45, 0], [0, -45], [0, 45]].map(([dx, dy], k) => <g key={k} transform={`translate(${dx} ${dy})`}>
-                  <path d="M-12 0H12M0-12V12" stroke="#f5ce79" strokeWidth=".65" />
-                  <path d="M0-9 1-1 9 0 1 1 0 9-1 1-9 0-1-1Z" fill="#ffe3a3" />
-                  <circle r="1.5" fill="#fff6d8" />
-                  <path d="M-8-3 A9 9 0 0 1 8-4 M8 3 A9 9 0 0 1-8 4" fill="none" stroke="#e4ac54" strokeWidth=".8" />
-                </g>)}
+                <g className="orb-rays" style={{ "--ray-duration": `${7 + (i * 7 % 6)}s`, "--ray-delay": `${-i * 1.37}s` }}>
+                  {Array.from({ length: 8 }, (_, ray) => <path key={ray} d="M0-1.8 225 0 0 1.8Z" fill="url(#ray-metal)" transform={`rotate(${ray * 45})`} />)}
+                </g>
+                <g className="orb-body" style={{ "--orb-duration": `${3.7 + (i * 3 % 5)}s`, "--orb-delay": `${-i * .91}s` }}>
+                  <circle r="6" fill="url(#orb-metal)" stroke="#d7a653" strokeWidth=".6" />
+                  <circle cx="-1.8" cy="-2" r="1.25" fill="#fff5d3" />
+                  <path d="M-10-4 A12 12 0 0 1 10-6 M10 4 A12 12 0 0 1-10 6" fill="none" stroke="#c99349" strokeWidth=".85" />
+                </g>
               </g>)}
             </g>
           </svg>

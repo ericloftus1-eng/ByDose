@@ -187,3 +187,14 @@ h1::before { width: 108%; height: 110%; background: radial-gradient(ellipse, #05
 .is-breathing .word { filter: brightness(1.5); }
 .lettering text { stroke-width: 1.5; }
 .experience::before { background: radial-gradient(ellipse at 34% 37%, #7d2ba576, transparent 42%), radial-gradient(ellipse at 67% 65%, #b3284268, transparent 41%), radial-gradient(ellipse at center, #63301245, transparent 55%); }
+
+/* Dimensional, independently breathing orbs with eight extending tapered rays. */
+.parallax { width: min(126vw, 126svh, 1420px); }
+.sparks { animation: none; }
+.orb-body { transform-box: fill-box; transform-origin: center; animation: orb-breathe var(--orb-duration) ease-in-out var(--orb-delay) infinite; }
+.orb-rays { transform-box: view-box; transform-origin: 0 0; animation: ray-flight var(--ray-duration) ease-in-out var(--ray-delay) infinite; }
+@keyframes orb-breathe { 0%, 100% { opacity: .75; scale: .88; } 48% { opacity: 1; scale: 1.18; } }
+@keyframes ray-flight { 0% { scale: .08; opacity: 0; } 20% { opacity: .5; } 68% { scale: 1; opacity: .8; } 80% { scale: 1; opacity: 1; } 100% { scale: 1; opacity: 0; } }
+.rings { filter: drop-shadow(0 1px 0 #57301b); }
+.lettering { filter: drop-shadow(0 1px 0 #9b672b) drop-shadow(0 2px 0 #60331b) drop-shadow(0 3px 0 #2b1620); }
+@media (prefers-reduced-motion: reduce) { .orb-body, .orb-rays { animation: none; } }
