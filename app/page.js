@@ -1,8 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Community from "./community";
 
 const words = ["DELIBERATE", "OBSERVATION", "SLOW", "ENLIGHTENMENT"];
+const wanderingWords = [
+  "CREATE", "BELONG", "CURIOSITY", "EXPRESSION", "CONNECTION", "PLAY",
+  "UNFINISHED", "WONDER", "AFTERGLOW", "SIDEWAYS", "PUDDLE", "PICKLE",
+  "COSMIC", "STATIC", "BANANA", "ELSEWHERE", "WHY NOT", "AGAIN",
+];
 const point = (radius, angle) => [radius * Math.cos(angle), radius * Math.sin(angle)];
 const hexagon = (radius) => Array.from({ length: 6 }, (_, i) => point(radius, i * Math.PI / 3));
 const nodes = [[0, 0], ...hexagon(130), ...hexagon(260)];
@@ -16,11 +22,19 @@ const star = Array.from({ length: 16 }, (_, i) => point(i % 2 ? 63 : 128, -Math.
 
 export default function Home() {
   const scene = useRef(null);
+  const communityHeading = useRef(null);
+  const enterButton = useRef(null);
+  const [entered, setEntered] = useState(false);
+  const [enterVisible, setEnterVisible] = useState(false);
   const [text, setText] = useState("DOSE");
   const [revealing, setRevealing] = useState(false);
   const [pulse, setPulse] = useState(false);
 
   useEffect(() => {
+    if (entered) {
+      communityHeading.current?.focus();
+      return;
+    }
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const timers = new Set();
     const later = (fn, delay) => {
@@ -28,19 +42,26 @@ export default function Home() {
       timers.add(id);
     };
     let wordIndex = 0;
+    let lastRandomIndex = -1;
     let introComplete = false;
     const showWord = (word) => {
       setText(word);
       setRevealing(true);
       later(() => { setRevealing(false); setText("DOSE"); }, 2400);
     };
+    const wander = () => {
+      if (!document.hidden && !motion.matches) {
+        // Pick a different word each time, without losing the original opening.
+        const index = (lastRandomIndex + 1 + Math.floor(Math.random() * (wanderingWords.length - 1))) % wanderingWords.length;
+        lastRandomIndex = index;
+        showWord(wanderingWords[index]);
+      }
+      later(wander, 6000 + Math.random() * 6000);
+    };
     const breathe = () => {
       if (!document.hidden && !motion.matches) {
         setPulse(true);
         later(() => setPulse(false), 1400);
-        if (introComplete && Math.random() < 0.08) {
-          showWord(words[Math.floor(Math.random() * words.length)]);
-        }
       }
       later(breathe, introComplete ? 8000 + Math.random() * 2000 : 3000);
     };
@@ -49,17 +70,37 @@ export default function Home() {
         showWord(words[wordIndex]);
         wordIndex += 1;
         if (wordIndex === words.length) {
-          // Let ENLIGHTENMENT finish approaching before entering the calm phase.
-          later(() => { introComplete = true; }, 2400);
+          later(() => {
+            introComplete = true;
+            later(wander, 6000 + Math.random() * 6000);
+          }, 2400);
           return;
         }
       }
       later(reveal, 5000);
     };
+    const offerEntry = () => {
+      if (!document.hidden) setEnterVisible(true);
+      later(() => {
+        setEnterVisible(false);
+        later(offerEntry, 4000 + Math.random() * 6000);
+      }, 5000);
+    };
     later(breathe, 3000);
     later(reveal, 5000);
+    later(offerEntry, 3500);
     return () => timers.forEach(clearTimeout);
-  }, []);
+  }, [entered]);
+
+  function returnToIntro() {
+    setText("DOSE");
+    setRevealing(false);
+    setPulse(false);
+    setEnterVisible(false);
+    setEntered(false);
+    // Focus the entry after React restores the intro controls.
+    requestAnimationFrame(() => enterButton.current?.focus());
+  }
 
   function move(event) {
     if (event.pointerType !== "mouse" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -74,7 +115,7 @@ export default function Home() {
   }
 
   return (
-    <main className={`experience ${pulse ? "is-breathing" : ""}`} onPointerMove={move} onPointerLeave={reset}>
+    <main className={`experience ${pulse && !entered ? "is-breathing" : ""} ${entered ? "community-open" : ""}`} onPointerMove={move} onPointerLeave={reset}>
       <div className="parallax" ref={scene} aria-hidden="true">
         <div className="breath">
           <svg className="geometry" viewBox="-670 -670 1340 1340" fill="none">
@@ -138,6 +179,12 @@ export default function Home() {
           </svg>
         </div>
       </div>
+      {entered ? <Community headingRef={communityHeading} onBack={returnToIntro} /> : <>
+      <button
+        ref={enterButton}
+        className={`enter-button ${enterVisible ? "is-visible" : ""}`}
+        onClick={() => setEntered(true)}
+      >Enter<span className="enter-caption">the collective</span></button>
       <h1 aria-label="DOSE"><span className={`word ${revealing ? "word-approach" : ""}`} aria-hidden="true">
         <svg className="lettering" viewBox="0 0 740 190" role="presentation">
           <defs>
@@ -148,6 +195,7 @@ export default function Home() {
           <text x="370" y="141" textAnchor="middle" fill="url(#letter-gold)" stroke="#f6d48a" strokeWidth=".55" fontSize={text === "DOSE" ? "166" : text.length > 10 ? "88" : text.length > 7 ? "100" : "150"} letterSpacing={text === "DOSE" ? "3" : "4"}>{text}</text>
         </svg>
       </span></h1>
+      </>}
     </main>
   );
 }
