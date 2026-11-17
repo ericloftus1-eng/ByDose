@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import Art from "./art";
 
 const meanings = [
   {
     word: "Art",
     line: "Leave a little of yourself in the world.",
-    description: "Art is how we turn what we feel into something we can share. A marker line, a painted deck, a custom color, a wild first attempt — it all belongs here. In the Dose community, you don’t need permission or a perfect piece. Just the urge to make something that is yours.",
+    description: "Art is how we turn what we feel into something we can share. A marker line, a painted deck, a photograph, a wild first attempt — it all belongs here. You don’t need a perfect piece. Just the urge to make something that is yours, with respect for other people’s work and spaces.",
     invitation: "Make it. Experiment. Share the process.",
   },
   {
@@ -40,12 +41,16 @@ export default function Community({ headingRef, onBack }) {
           <button key={item.word} aria-pressed={selected === item.word} aria-controls="meaning-panel" onClick={() => setSelected(item.word)}>{item.word}</button>
         ))}
       </div>
-      <article className="meaning-panel" id="meaning-panel" aria-live="polite" aria-atomic="true">
-        <p className="meaning-label">{meaning.word} / In the Dose community</p>
-        <h2>{meaning.line}</h2>
-        <p>{meaning.description}</p>
-        <p className="meaning-invitation">{meaning.invitation}</p>
-      </article>
+      <div id="meaning-panel">
+        {selected === "Art" ? <Art /> : (
+          <article className="meaning-panel" aria-live="polite" aria-atomic="true">
+            <p className="meaning-label">{meaning.word} / In the Dose community</p>
+            <h2>{meaning.line}</h2>
+            <p>{meaning.description}</p>
+            <p className="meaning-invitation">{meaning.invitation}</p>
+          </article>
+        )}
+      </div>
       <p className="collective-footer">Make your mark. Make room for others.</p>
     </section>
   );
