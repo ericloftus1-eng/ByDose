@@ -1,153 +1,148 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import s from "./social.module.css";
 
-const words = ["DELIBERATE", "OBSERVATION", "SLOW", "ENLIGHTENMENT"];
-const point = (radius, angle) => [radius * Math.cos(angle), radius * Math.sin(angle)];
-const hexagon = (radius) => Array.from({ length: 6 }, (_, i) => point(radius, i * Math.PI / 3));
-const nodes = [[0, 0], ...hexagon(130), ...hexagon(260)];
-const flower = [];
-for (let q = -2; q <= 2; q++) {
-  for (let r = -2; r <= 2; r++) {
-    if (Math.abs(q + r) <= 2) flower.push([130 * (q + r / 2), 130 * Math.sqrt(3) / 2 * r]);
-  }
+const artists = [
+  { id: "mara", name: "Mara Sol", handle: "marasol", initials: "MS", color: "#b0a0cf", medium: "Painter & color collector", bio: "Finding little worlds between shape, color, and the everyday. Sample artist profile for the DOSE layout." },
+  { id: "eli", name: "Eli Rivers", handle: "elirivers", initials: "ER", color: "#bfc6a6", medium: "Light chaser · Photography", bio: "Quiet corners, long walks, and the things we almost miss. Sample artist profile for the DOSE layout." },
+  { id: "june", name: "June Park", handle: "junemakes", initials: "JP", color: "#d6a184", medium: "Digital artist & daydreamer", bio: "Organic shapes and imaginary places. Usually making something a little strange. Sample artist profile for the DOSE layout." },
+];
+const initialPosts = [
+  { id: "p1", artist: "mara", title: "Somewhere in between", caption: "Letting the colors have the conversation today. A little study in balance, and knowing when to stop.", medium: "Painting", image: "/art/balance.svg", alt: "Original abstract demo artwork with lavender arches, a rust-red circle, and a pale yellow sun", likes: 128, time: "2h", tag: "#colorstudies" },
+  { id: "p2", artist: "eli", title: "The quiet hours", caption: "An imagined landscape, before the rest of the world wakes up. A study for my next photo walk.", medium: "Photography", image: "/art/quiet.svg", alt: "Illustrated placeholder landscape of olive hills, a pale sun, and a reflective lake", likes: 86, time: "4h", tag: "#lightandshadow" },
+  { id: "p3", artist: "june", title: "Objects from a daydream", caption: "No brief. No destination. Just following a shape until it becomes something else.", medium: "Digital", image: "/art/objects.svg", alt: "Original demo digital artwork of a peach sculptural ribbon against a cobalt background", likes: 204, time: "6h", tag: "#digitalplay" },
+];
+const me = { id: "you", name: "Your studio", handle: "you", initials: "Y", color: "#d7dfb0", medium: "A work in progress", bio: "Your demo studio. The posts you create in this preview appear here until you reload." };
+const categories = ["All work", "Painting", "Digital", "Photography"];
+
+function Icon({ name, size = 20 }) {
+  const paths = {
+    bloom: <path d="M12 2v20M2 12h20M5 5l14 14M5 19 19 5" strokeWidth="2.8" />,
+    external: <path d="M6 18 18 6M6 6h12v12" />,
+    check: <path d="m5 12 4 4L19 6" />,
+    home: <><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z" /></>,
+    compass: <><circle cx="12" cy="12" r="9" /><path d="m16 8-2 6-6 2 2-6Z" /></>,
+    bookmark: <path d="M6 3h12v18l-6-4-6 4Z" />,
+    user: <><circle cx="12" cy="8" r="4" /><path d="M4 21v-2a8 8 0 0 1 16 0v2" /></>,
+    plus: <path d="M12 5v14M5 12h14" />,
+    search: <><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></>,
+    heart: <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0l-1 1-1-1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" />,
+    comment: <path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5H3l1.7-4.2A8.5 8.5 0 1 1 21 11.5Z" />,
+    arrow: <path d="M5 12h14m-6-6 6 6-6 6" />,
+    close: <path d="m6 6 12 12M18 6 6 18" />,
+    image: <><rect x="3" y="3" width="18" height="18" rx="3" /><circle cx="8" cy="8" r="1" /><path d="m3 17 5-5 4 4 4-7 5 8" /></>,
+  };
+  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name] || paths.compass}</svg>;
 }
-const star = Array.from({ length: 16 }, (_, i) => point(i % 2 ? 63 : 128, -Math.PI / 2 + i * Math.PI / 8).join(",")).join(" ");
+function Avatar({ artist, small = false }) {
+  return <span className={`${s.avatar} ${small ? s.smallAvatar : ""}`} style={{ "--avatar": artist.color }}>{artist.initials}</span>;
+}
 
-export default function Home() {
-  const scene = useRef(null);
-  const [text, setText] = useState("DOSE");
-  const [revealing, setRevealing] = useState(false);
-  const [pulse, setPulse] = useState(false);
+export default function SocialHome() {
+  const [view, setView] = useState("Feed");
+  const [tab, setTab] = useState("For you");
+  const [category, setCategory] = useState("All work");
+  const [query, setQuery] = useState("");
+  const [posts, setPosts] = useState(initialPosts);
+  const [liked, setLiked] = useState([]);
+  const [saved, setSaved] = useState([]);
+  const [following, setFollowing] = useState(["mara"]);
+  const [comments, setComments] = useState({});
+  const [commentPost, setCommentPost] = useState(null);
+  const [notice, setNotice] = useState("");
+  const [composing, setComposing] = useState(false);
+  const [profile, setProfile] = useState(null);
+  const [artwork, setArtwork] = useState("/art/balance.svg");
+  const dialog = useRef(null);
+  const trigger = useRef(null);
+  const allArtists = [...artists, me];
+  const toggle = (setter, value) => setter(previous => previous.includes(value) ? previous.filter(item => item !== value) : [...previous, value]);
+  const visiblePosts = posts.filter(post => {
+    const artist = allArtists.find(person => person.id === post.artist);
+    const text = `${post.title} ${post.caption} ${post.tag} ${artist.name} ${artist.handle}`.toLowerCase();
+    return (category === "All work" || post.medium === category) && text.includes(query.toLowerCase()) && (view !== "Saved" || saved.includes(post.id)) && (view !== "My studio" || post.artist === "you") && (view !== "Feed" || tab !== "Following" || following.includes(post.artist));
+  });
 
-  useEffect(() => {
-    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const timers = new Set();
-    const later = (fn, delay) => {
-      const id = setTimeout(() => { timers.delete(id); fn(); }, delay);
-      timers.add(id);
-    };
-    let wordIndex = 0;
-    let introComplete = false;
-    const showWord = (word) => {
-      setText(word);
-      setRevealing(true);
-      later(() => { setRevealing(false); setText("DOSE"); }, 2400);
-    };
-    const breathe = () => {
-      if (!document.hidden && !motion.matches) {
-        setPulse(true);
-        later(() => setPulse(false), 1400);
-        if (introComplete && Math.random() < 0.08) {
-          showWord(words[Math.floor(Math.random() * words.length)]);
-        }
-      }
-      later(breathe, introComplete ? 8000 + Math.random() * 2000 : 3000);
-    };
-    const reveal = () => {
-      if (!document.hidden && !motion.matches) {
-        showWord(words[wordIndex]);
-        wordIndex += 1;
-        if (wordIndex === words.length) {
-          // Let ENLIGHTENMENT finish approaching before entering the calm phase.
-          later(() => { introComplete = true; }, 2400);
-          return;
-        }
-      }
-      later(reveal, 5000);
-    };
-    later(breathe, 3000);
-    later(reveal, 5000);
-    return () => timers.forEach(clearTimeout);
-  }, []);
-
-  function move(event) {
-    if (event.pointerType !== "mouse" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const x = Math.max(-10, Math.min(10, (event.clientX / window.innerWidth - 0.5) * 20));
-    const y = Math.max(-10, Math.min(10, (event.clientY / window.innerHeight - 0.5) * 20));
-    scene.current.style.setProperty("--x", `${x}px`);
-    scene.current.style.setProperty("--y", `${y}px`);
+  function openModal(kind, artist = null) {
+    trigger.current = document.activeElement;
+    setComposing(kind === "compose");
+    setProfile(artist);
+    if (kind === "compose") setArtwork("/art/balance.svg");
+    dialog.current.showModal();
   }
-  function reset() {
-    scene.current.style.setProperty("--x", "0px");
-    scene.current.style.setProperty("--y", "0px");
+  function closeModal() { dialog.current.close(); trigger.current?.focus(); }
+  function changeView(next) { setView(next); setQuery(""); setCategory("All work"); setNotice(""); }
+  function publish(event) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const title = data.get("title").trim();
+    const caption = data.get("caption").trim();
+    if (!title || !caption) return;
+    const medium = data.get("medium");
+    setPosts(previous => [{ id: `local-${Date.now()}`, artist: "you", title, caption, medium, image: artwork, alt: "Selected demo artwork for your preview post", likes: 0, time: "Just now", tag: "#newwork" }, ...previous]);
+    setView("Feed"); setTab("For you"); setCategory("All work"); setQuery("");
+    setNotice("Your demo post is in the feed. It stays here until you reload.");
+    event.currentTarget.reset(); closeModal();
   }
 
   return (
-    <main className={`experience ${pulse ? "is-breathing" : ""}`} onPointerMove={move} onPointerLeave={reset}>
-      <div className="parallax" ref={scene} aria-hidden="true">
-        <div className="breath">
-          <svg className="geometry" viewBox="-670 -670 1340 1340" fill="none">
-            <defs>
-              <radialGradient id="orb-metal" cx="30%" cy="25%" r="75%"><stop stopColor="#fff8dc" /><stop offset=".2" stopColor="#f3ca78" /><stop offset=".48" stopColor="#b77a2c" /><stop offset=".8" stopColor="#603016" /><stop offset="1" stopColor="#160c16" /></radialGradient>
-              <linearGradient id="ray-metal"><stop stopColor="#ffe7a8" /><stop offset=".45" stopColor="#ce963e" /><stop offset="1" stopColor="#9d455d" stopOpacity="0" /></linearGradient>
-              <radialGradient id="spark"><stop stopColor="#fff8dc" /><stop offset=".15" stopColor="#ffe6a0" stopOpacity=".9" /><stop offset="1" stopColor="#d4af37" stopOpacity="0" /></radialGradient>
-              <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop stopColor="#fff0bb" /><stop offset=".45" stopColor="#d4af37" /><stop offset=".65" stopColor="#fff1c4" /><stop offset="1" stopColor="#b67c25" /></linearGradient>
-            </defs>
-            <g className="rings">
-              {[330, 345, 385, 393].map(radius => <circle key={radius} r={radius} />)}
-            </g>
-            <g className="reference-petals">
-              {Array.from({ length: 6 }, (_, i) => <ellipse key={i} cx="0" cy="-115" rx="91" ry="164" transform={`rotate(${i * 60})`} />)}
-            </g>
-            <g className="fine-rings">
-              {[205, 222, 278, 302, 318].map(radius => <circle key={radius} r={radius} />)}
-            </g>
-            <g className="triangles">
-              <polygon points="0,-315 273,158 -273,158" />
-              <polygon points="0,315 -273,-158 273,-158" />
-            </g>
-            <circle className="dotted-ring" r="363" strokeDasharray="1 11" strokeLinecap="round" />
-            <g className="ornaments">
-              {[-1, 1].map(sign => <g key={sign}>
-                <circle cy={sign * 270} r="91" />
-                <circle cy={sign * 294} r="27" />
-                <circle cy={sign * 211} r="43" />
-                <circle cy={sign * 398} r="4" />
-                <circle cy={sign * 370} r="12" />
-                <circle cx={sign * 365} r="20" />
-                <circle cx={sign * 401} r="8" />
-              </g>)}
-              <line x1="0" y1="-412" x2="0" y2="412" />
-              <line x1="-412" y1="0" x2="412" y2="0" />
-            </g>
-            <g className="flower">
-              {flower.map(([x, y], i) => <circle key={i} cx={x} cy={y} r="130" />)}
-            </g>
-            <g className="cube">
-              {nodes.flatMap(([x, y], i) => nodes.slice(i + 1).map(([x2, y2], j) => <line key={`${i}-${j}`} x1={x} y1={y} x2={x2} y2={y2} />))}
-              {nodes.map(([x, y], i) => <circle key={i} cx={x} cy={y} r="65" />)}
-            </g>
-            <polygon className="star" points={star} />
-            <circle className="core" r="145" />
-            <g className="axis-beads">
-              {[-1, 1].flatMap(sign => [40, 80, 120, 160, 200, 240, 280, 320, 400].map(distance => <circle key={`${sign}-${distance}`} cy={sign * distance} r={distance % 80 === 0 ? 2 : 1} fill="#ffe6a0" stroke="none" />))}
-            </g>
-            <g className="sparks" stroke="none">
-              {[...hexagon(260), [0, -260], [0, 260], [0, -370], [0, 370], [-365, 0], [365, 0], [0, -168], [0, 168], [0, -211], [0, 211], [0, -315], [0, 315], [0, 0]].map(([x, y], i) => <g key={i} transform={`translate(${x} ${y})`}>
-                <g className="orb-rays" style={{ "--ray-duration": `${7 + (i * 7 % 6)}s`, "--ray-delay": `${-i * 1.37}s` }}>
-                  {Array.from({ length: 8 }, (_, ray) => <path key={ray} d="M0-1.8 225 0 0 1.8Z" fill="url(#ray-metal)" transform={`rotate(${ray * 45})`} />)}
-                </g>
-                <g className="orb-body" style={{ "--orb-duration": `${3.7 + (i * 3 % 5)}s`, "--orb-delay": `${-i * .91}s` }}>
-                  <circle r="6" fill="url(#orb-metal)" stroke="#d7a653" strokeWidth=".6" />
-                  <circle cx="-1.8" cy="-2" r="1.25" fill="#fff5d3" />
-                  <path d="M-10-4 A12 12 0 0 1 10-6 M10 4 A12 12 0 0 1-10 6" fill="none" stroke="#c99349" strokeWidth=".85" />
-                </g>
-              </g>)}
-            </g>
-          </svg>
-        </div>
+    <div className={s.social}>
+      <a className={s.skip} href="#feed">Skip to feed</a>
+      <header className={s.topbar}>
+        <a href="/" className={s.brand} aria-label="DOSE home">dose<span><Icon name="bloom" /></span><small>ART IS A SOCIAL THING.</small></a>
+        <label className={s.search}><Icon name="search" size={18} /><span className={s.srOnly}>Search artwork or artists</span><input type="search" placeholder="Find your next inspiration" value={query} onChange={event => setQuery(event.target.value)} /><kbd>/ art</kbd></label>
+        <div className={s.topActions}><span className={s.previewLabel}>LAYOUT PREVIEW</span><button className={s.avatarButton} aria-label="Open your demo studio" onClick={() => changeView("My studio")}><Avatar artist={me} small /></button></div>
+      </header>
+      <div className={s.shell}>
+        <aside className={s.sidebar}>
+          <p className={s.eyebrow}>YOUR DAILY DOSE</p>
+          <nav aria-label="Main navigation">
+            {[["Feed", "home"], ["Explore", "compass"], ["Saved", "bookmark"], ["My studio", "user"]].map(([label, icon]) => <button key={label} className={view === label ? s.navActive : ""} aria-current={view === label ? "page" : undefined} onClick={() => changeView(label)}><Icon name={icon} />{label}{label === "Feed" && <span className={s.navDot} />}</button>)}
+          </nav>
+          <button className={s.createButton} onClick={() => openModal("compose")}><Icon name="plus" size={18} /> Create a post</button>
+          <div className={s.sidebarCollection}><span className={s.miniFlower}><Icon name="bloom" size={30} /></span><p>A little intention.<br />A little chaos.</p><a href="/intro">The DOSE experience <span><Icon name="external" size={13} /></span></a></div>
+          <div className={s.sidebarBottom}><p>Different hands.<br />Shared energy.</p><span>Art · Culture · Community</span><small>Demo artists & artwork.<br />Interactions reset on reload.</small></div>
+        </aside>
+        <main id="feed" className={s.main}>
+          <section className={s.welcome}>
+            <div><p className={s.eyebrow}>A PLACE FOR YOUR KIND OF DIFFERENT</p><h1>{view === "Feed" ? <>Good art.<br />Better company<span>.</span></> : view === "Explore" ? <>Find your next<br /><em>what if.</em></> : view === "Saved" ? <>Keep a little<br /><em>inspiration.</em></> : <>Your space.<br /><em>Your expression.</em></>}</h1><p className={s.welcomeText}>{view === "Feed" ? "Share what you make. Find your people. Stay a little curious." : view === "Explore" ? "Different mediums. Unexpected connections. Follow what moves you." : view === "Saved" ? "A personal collection of the pieces that made you pause." : "Your demo posts live here. Every artist starts somewhere."}</p></div>
+            <div className={s.heroMark} aria-hidden="true"><div><Icon name="bloom" /></div><span>MAKE SOMETHING.<br />FEEL SOMETHING.</span></div>
+          </section>
+          <div className={s.demoNote}><span className={s.liveDot} /> A first look at the DOSE community <span>Sample content · No sign-up needed</span></div>
+          <section className={s.feedSection} aria-label="Artwork feed">
+            <div className={s.feedHeading}><div className={s.tabs} aria-label="Feed selection">{view === "Feed" ? ["For you", "Following"].map(label => <button key={label} aria-pressed={tab === label} className={tab === label ? s.activeTab : ""} onClick={() => setTab(label)}>{label}</button>) : <h2>{view === "Explore" ? "Discover something good" : view === "Saved" ? "Your saved pieces" : "From your studio"}</h2>}</div><span className={s.feedOrder}>A little inspiration ↓</span></div>
+            <div className={s.filters} aria-label="Filter by medium">{categories.map(item => <button key={item} aria-pressed={category === item} className={category === item ? s.filterActive : ""} onClick={() => setCategory(item)}>{item}</button>)}</div>
+            <p role="status" className={notice ? s.notice : s.srOnly}>{notice}</p>
+            {query && <p className={s.results}>{visiblePosts.length} result{visiblePosts.length === 1 ? "" : "s"} for “{query}”</p>}
+            <div className={s.posts}>
+              {visiblePosts.map(post => {
+                const artist = allArtists.find(person => person.id === post.artist);
+                return <article key={post.id} className={s.post}>
+                  <div className={s.postHeader}><button className={s.artistButton} onClick={() => openModal("profile", artist)}><Avatar artist={artist} /><span><strong>{artist.name}</strong><small>@{artist.handle} <span>· {post.time}</span></small></span></button><span className={s.medium}>{post.medium}</span></div>
+                  <div className={s.artwork}><img src={post.image} alt={post.alt} width="960" height="680" /><span className={s.artworkLabel}>DOSE STUDY / {post.medium.toUpperCase()}</span></div>
+                  <div className={s.postContent}><div className={s.postActions}><div><button aria-label={`${liked.includes(post.id) ? "Unlike" : "Like"} ${post.title}`} aria-pressed={liked.includes(post.id)} className={liked.includes(post.id) ? s.liked : ""} onClick={() => toggle(setLiked, post.id)}><Icon name="heart" /> <span>{post.likes + Number(liked.includes(post.id))}</span></button><button aria-label={`Comments on ${post.title}`} aria-expanded={commentPost === post.id} onClick={() => setCommentPost(commentPost === post.id ? null : post.id)}><Icon name="comment" /><span>{(comments[post.id] || []).length}</span></button></div><button aria-label={`${saved.includes(post.id) ? "Unsave" : "Save"} ${post.title}`} aria-pressed={saved.includes(post.id)} className={saved.includes(post.id) ? s.isSaved : ""} onClick={() => toggle(setSaved, post.id)}><Icon name="bookmark" /></button></div><h3>{post.title}</h3><p>{post.caption}</p><button className={s.hashtag} onClick={() => { setQuery(post.tag); }}>{post.tag}</button>
+                  {commentPost === post.id && <div className={s.comments}><p className={s.commentNote}>Join the conversation · demo comments</p>{(comments[post.id] || []).map((text, index) => <p className={s.comment} key={index}><strong>You</strong> {text}</p>)}<form onSubmit={event => { event.preventDefault(); const form = event.currentTarget; const text = new FormData(form).get("comment").trim(); if (!text) return; setComments(previous => ({ ...previous, [post.id]: [...(previous[post.id] || []), text] })); form.reset(); }}><label className={s.srOnly} htmlFor={`comment-${post.id}`}>Your comment</label><input id={`comment-${post.id}`} name="comment" placeholder="Leave a little encouragement…" maxLength={500} required /><button type="submit">Post</button></form></div>}
+                  </div>
+                </article>;
+              })}
+              {!visiblePosts.length && <div className={s.empty}><Icon name={view === "Saved" ? "bookmark" : "image"} size={32} /><h3>{query ? "Nothing here just yet" : view === "Saved" ? "Make room for inspiration" : view === "My studio" ? "Your first mark starts here" : "A fresh canvas"}</h3><p>{query ? "Try another artist, title, or tag." : view === "Saved" ? "Tap the bookmark on a piece to collect it here." : view === "My studio" ? "Create a demo post and make this space yours." : "Try another medium, or follow an artist to see their work."}</p><button onClick={() => { if (view === "My studio") openModal("compose"); else { changeView("Explore"); setTab("For you"); } }}>{view === "My studio" ? "Create your first post" : "Explore artwork"} <Icon name="arrow" size={16} /></button></div>}
+            </div>
+            <p className={s.feedFooter}>You’re in good creative company. <span><Icon name="bloom" /></span></p>
+          </section>
+        </main>
+        <aside className={s.rightbar}>
+          <section className={s.artistSuggestions}><div className={s.sectionHeading}><h2>Find your people</h2><span><Icon name="external" size={13} /></span></div><p>A few creative souls to start with.</p>{artists.map(artist => <div className={s.suggestion} key={artist.id}><button className={s.artistButton} onClick={() => openModal("profile", artist)}><Avatar artist={artist} small /><span><strong>{artist.name}</strong><small>{artist.medium.split(" · ")[0]}</small></span></button><button className={s.follow} aria-label={`${following.includes(artist.id) ? "Unfollow" : "Follow"} ${artist.name}`} aria-pressed={following.includes(artist.id)} onClick={() => toggle(setFollowing, artist.id)}>{following.includes(artist.id) ? <Icon name="check" size={14} /> : <Icon name="plus" size={14} />}</button></div>)}</section>
+          <section className={s.projectCard}><div className={s.projectTop}>FROM THE COLLECTIVE <span>01 / 09</span></div><div className={s.boardRow} aria-hidden="true">{[0, 1, 2, 3, 4].map(n => <span key={n} style={{ "--n": n }} />)}</div><span className={s.projectEyebrow}>NINE BOARDS. DIFFERENT HANDS.</span><h2>The Secret Nine<span>.</span></h2><p>A second life for old decks.<br />A new canvas for original voices.</p><a href="/collection">Explore the project <Icon name="arrow" size={17} /></a><small>Planned reveal · February 2027<br />Artist entries are not open.</small></section>
+          <section className={s.prompt}><span className={s.eyebrow}>A LITTLE CREATIVE NUDGE</span><h2>Make something<br />just because.</h2><p>Not everything needs a brief.<br />Your work in progress belongs here, too.</p><button onClick={() => openModal("compose")}>Share a work in progress <span><Icon name="external" size={13} /></span></button></section>
+          <p className={s.rightFooter}>A space for original work & open minds.<br />Respect the artist. Credit the inspiration.<br /><span>© {new Date().getFullYear()} DOSE Art Collective</span></p>
+        </aside>
       </div>
-      <h1 aria-label="DOSE"><span className={`word ${revealing ? "word-approach" : ""}`} aria-hidden="true">
-        <svg className="lettering" viewBox="0 0 740 190" role="presentation">
-          <defs>
-            <linearGradient id="letter-gold" x1="0" y1="0" x2="20%" y2="100%">
-              <stop stopColor="#dfb86c" /><stop offset=".25" stopColor="#b98635" /><stop offset=".42" stopColor="#8b591d" /><stop offset=".48" stopColor="#523015" /><stop offset=".56" stopColor="#e6bc70" /><stop offset=".76" stopColor="#a36e29" /><stop offset=".87" stopColor="#6d391e" /><stop offset="1" stopColor="#bb843b" />
-            </linearGradient>
-          </defs>
-          <text x="370" y="141" textAnchor="middle" fill="url(#letter-gold)" stroke="#f6d48a" strokeWidth=".55" fontSize={text === "DOSE" ? "166" : text.length > 10 ? "88" : text.length > 7 ? "100" : "150"} letterSpacing={text === "DOSE" ? "3" : "4"}>{text}</text>
-        </svg>
-      </span></h1>
-    </main>
+      <button className={s.mobileCreate} aria-label="Create a post" onClick={() => openModal("compose")}><Icon name="plus" /></button>
+      <dialog ref={dialog} className={s.dialog} aria-labelledby="dialog-title" onClick={event => { if (event.target === event.currentTarget) closeModal(); }} onCancel={() => trigger.current?.focus()}>
+        <div className={s.dialogTop}><span className={s.eyebrow}>YOUR LITTLE CORNER OF DOSE</span><button aria-label="Close dialog" onClick={closeModal}><Icon name="close" /></button></div>
+        {composing ? <form className={s.composer} onSubmit={publish}><h2 id="dialog-title">Make your mark<span>.</span></h2><p>This is a demo. Choose sample artwork to try the layout. Nothing is uploaded or published publicly.</p><label htmlFor="post-title">Give it a name</label><input id="post-title" name="title" placeholder="An idea, a feeling, a happy accident…" maxLength={100} required /><label htmlFor="post-caption">The story behind it</label><textarea id="post-caption" name="caption" placeholder="What have you been making?" maxLength={1200} rows={3} required /><label htmlFor="post-medium">Medium</label><select id="post-medium" name="medium"><option>Painting</option><option>Digital</option><option>Photography</option></select><fieldset><legend>Choose demo artwork</legend><div className={s.artChoices}>{initialPosts.map(post => <label key={post.id}><input type="radio" name="artwork" value={post.image} checked={artwork === post.image} onChange={() => setArtwork(post.image)} /><img src={post.image} alt={post.alt} width="160" height="110" /></label>)}</div></fieldset><button className={s.publish} type="submit">Add to demo feed <Icon name="arrow" size={18} /></button><small>Posts, likes, comments, and follows reset on reload.</small></form> : profile && <section className={s.profile}><Avatar artist={profile} /><h2 id="dialog-title">{profile.name}</h2><span>@{profile.handle}</span><h3>{profile.medium}</h3><p>{profile.bio}</p>{profile.id !== "you" && <button className={s.publish} aria-pressed={following.includes(profile.id)} onClick={() => toggle(setFollowing, profile.id)}>{following.includes(profile.id) ? "Following" : "Follow artist +"}</button>}<button className={s.profileWork} onClick={() => { changeView(profile.id === "you" ? "My studio" : "Explore"); if (profile.id !== "you") setQuery(profile.name); closeModal(); }}>View artwork <Icon name="arrow" size={18} /></button></section>}
+      </dialog>
+    </div>
   );
 }
