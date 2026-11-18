@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "DOSE Art Collective",
-  description: "Art, culture, and community. A creative collective for artists, makers, and the painted world.",
+  title: "DOSE — Art is a social thing",
+  description: "A first look at the DOSE art community. Share what you make, discover original voices, and find your creative people.",
 };
 
 export default function RootLayout({ children }) {
