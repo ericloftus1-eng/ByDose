@@ -16,6 +16,7 @@ Use `npm run build` for the production build and `npm start` to serve it.
 ## Routes
 
 - `/`: responsive social feed, medium and search filters, following feed, saved pieces, artist profiles, and a demo studio.
+- `/community`: real auth/profile/posting integration foundation (requires Supabase setup; see below).
 - `/intro`: the original animated DOSE experience and collective entry.
 - `/collection`: the existing Secret Nine project concept, with artist entries still closed.
 
@@ -35,3 +36,11 @@ Likes, saves, follows, comments, and composer posts work only in memory and rese
 ## Checks
 
 Run `npm run build` and `git diff --check`. Browser verification should cover desktop and mobile, feed filters/search, likes and saves, following, profiles, comments, creating a demo post, and the preserved routes.
+
+## Real community foundation
+
+Use the **Join the community** link to open `/community`. This is separate from the fictional design demo. The route supports Supabase email/password accounts with confirmation/reset, public artist profiles and avatars, public artwork posts and galleries, and owner-only post deletion. It intentionally shows a setup-pending state when backend environment variables are missing.
+
+**Integration is not connected yet.** See [`supabase/SETUP.md`](supabase/SETUP.md) for preview-only provisioning, the database migration, privacy constraints, and the required live two-account verification. No remote schema or live upload has been verified. Do not treat this as public-launch ready.
+
+Run `npm run test:foundation` for embedded PostgreSQL access-control checks and upload-validation tests. These complement the production build; they do not replace hosted backend testing.
