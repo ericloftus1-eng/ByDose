@@ -92,7 +92,7 @@ export default function SocialHome() {
       <header className={s.topbar}>
         <a href="/" className={s.brand} aria-label="DOSE home">dose<span><Icon name="bloom" /></span><small>ART IS A SOCIAL THING.</small></a>
         <label className={s.search}><Icon name="search" size={18} /><span className={s.srOnly}>Search artwork or artists</span><input type="search" placeholder="Find your next inspiration" value={query} onChange={event => setQuery(event.target.value)} /><kbd>/ art</kbd></label>
-        <div className={s.topActions}><span className={s.previewLabel}>LAYOUT PREVIEW</span><button className={s.avatarButton} aria-label="Open your demo studio" onClick={() => changeView("My studio")}><Avatar artist={me} small /></button></div>
+        <div className={s.topActions}><a className={s.communityLink} href="/community">Join the community ↗</a><button className={s.avatarButton} aria-label="Open your demo studio" onClick={() => changeView("My studio")}><Avatar artist={me} small /></button></div>
       </header>
       <div className={s.shell}>
         <aside className={s.sidebar}>

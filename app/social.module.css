@@ -172,3 +172,6 @@
 .heroMark svg { display: block; width: 1em; height: 1em; }
 .feedFooter svg { width: 12px; height: 12px; vertical-align: middle; }
 @media (max-width: 640px) { .brand > span svg { width: 31px; height: 31px; } }
+
+.communityLink { font-size: 10px; color: var(--accent) !important; border: 1px solid #526044; border-radius: 4px; padding: 7px 10px; white-space: nowrap; }
+@media (max-width: 640px) { .topbar { grid-template-columns: 82px minmax(0, 1fr) 94px; gap: 10px; padding: 0 15px; } .topActions { gap: 0; } .topActions .avatarButton { display: none; } .communityLink { font-size: 8px; padding: 6px; white-space: normal; text-align: center; } }
