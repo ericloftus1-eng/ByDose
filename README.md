@@ -1,37 +1,30 @@
-# DOSE Art Collective
+# ByDose
 
-An art-first social community layout built with Next.js and React.
+Street roots. Open possibilities. DOSE Art is the first space inside ByDose, not the whole of it.
 
-## Run locally
+## Run and check
 
-Use Node.js 20.9 or newer.
-
-```sh
-npm ci
-npm run dev
-```
-
-Use `npm run build` for the production build and `npm start` to serve it.
+Node.js 20.9+; `npm ci`, `npm run dev`, `npm run test:foundation`, `npm run build`, `npm audit`, and `git diff --check`.
 
 ## Routes
 
-- `/`: responsive social feed, medium and search filters, following feed, saved pieces, artist profiles, and a demo studio.
-- `/intro`: the original animated DOSE experience and collective entry.
-- `/collection`: the existing Secret Nine project concept, with artist entries still closed.
+- `/` and `/intro`: preserved animated DOSE mandala; **Enter ByDose** opens the umbrella landing page.
+- `/hub`: direct ByDose landing page, DOSE Art entrance, deliberately disabled coming-soon spaces, and **Suggest an idea**.
+- `/community`: real account/profile/artwork integration foundation. Preview backend setup is still required, and controls stay unavailable until activated.
+- `/suggestions`: real private, authenticated suggestion form and own submission history; unavailable until backend activation. No pretend saving.
+- `/art-preview`: street-first interactive design demo with fictional artists, six original SVG studies, graffiti/mural/blackbook filters, and memory-only likes/saves/follows/comments/composer. No real uploads; state resets on reload. Photography uses an illustrated placeholder, not a photograph.
+- `/collection`: preserved Secret Nine project concept; artist entries are not open.
 
-## Preview behavior
+## Backend status
 
-All artists and feed posts are fictional sample content. The three SVG studies in `public/art` are original layout illustrations; the Photography card is an illustrated placeholder, not a photograph or a submitted artwork.
+A dedicated Supabase Free resource is connected to **Preview only**. No hosted SQL migrations, Auth redirect settings, real accounts, emails, or uploads have been verified. Follow [`supabase/ACTIVATE.md`](supabase/ACTIVATE.md) and the two-account checks in [`supabase/SETUP.md`](supabase/SETUP.md).
 
-Likes, saves, follows, comments, and composer posts work only in memory and reset on reload. The composer selects sample illustrations; it does not upload files or publish publicly. There is no authentication, database, messaging, or real social network yet.
+The application uses only public Supabase URL/publishable-key variables. `NEXT_PUBLIC_BYDOSE_BACKEND_READY=true` is a deployment readiness gate, not authorization. Supabase RLS and storage policies enforce ownership; never put a service-role key in client code. Keep the preview invitation-only until privacy, moderation, abuse, and deletion safeguards are ready.
 
-## Design files
+`test:foundation` executes both actual migrations against embedded PostgreSQL with modeled Auth/Storage schemas and tests upload type/size validation. It covers private suggestions, ownership/spoofing denials and a five-per-day DB-enforced limit. It does not verify the hosted provider.
 
-- `app/page.js`: social layout and demo interactions
-- `app/social.module.css`: responsive, scoped social styles
-- `app/intro/page.js` and `app/globals.css`: original intro
-- `app/art.js` and `app/art.css`: Secret Nine concept
+Artwork/profiles and their media URLs are public; suggestions are private to their author and the site operator. The operator reviews suggestions in provider tooling, not an unsecured browser admin panel.
 
-## Checks
+## Assets
 
-Run `npm run build` and `git diff --check`. Browser verification should cover desktop and mobile, feed filters/search, likes and saves, following, profiles, comments, creating a demo post, and the preserved routes.
+The six SVG artwork studies are original illustrations, not user submissions. Barlow Condensed 900 Latin is self-hosted under the SIL Open Font License (`public/fonts/OFL.txt`). No external runtime font service is used.

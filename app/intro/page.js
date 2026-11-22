@@ -116,7 +116,7 @@ export default function Home() {
 
   return (
     <main className={`experience ${pulse && !entered ? "is-breathing" : ""} ${entered ? "community-open" : ""}`} onPointerMove={move} onPointerLeave={reset}>
-      <a className="intro-home" href="/">← Community feed</a>
+      {!entered && <a className="intro-home" href="/hub">ByDose home →</a>}
       <div className="parallax" ref={scene} aria-hidden="true">
         <div className="breath">
           <svg className="geometry" viewBox="-670 -670 1340 1340" fill="none">
@@ -185,7 +185,7 @@ export default function Home() {
         ref={enterButton}
         className={`enter-button ${enterVisible ? "is-visible" : ""}`}
         onClick={() => setEntered(true)}
-      >Enter<span className="enter-caption">the collective</span></button>
+      >Enter<span className="enter-caption">ByDose</span></button>
       <h1 aria-label="DOSE"><span className={`word ${revealing ? "word-approach" : ""}`} aria-hidden="true">
         <svg className="lettering" viewBox="0 0 740 190" role="presentation">
           <defs>
