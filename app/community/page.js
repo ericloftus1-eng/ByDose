@@ -387,7 +387,7 @@ export default function CommunityPage() {
           ByDose<span> / DOSE ART</span>
         </a>
         <nav aria-label="Community navigation">
-          <a href="/hub">ByDose home</a><a href="/suggestions">Suggest an idea ↗</a>
+          <a href="/hub">ByDose home</a><a href="/suggestions">Suggest an idea →</a>
           <button disabled={!configured || busy} onClick={() => go("feed")}>
             Discover
           </button>

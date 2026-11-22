@@ -75,7 +75,7 @@ export default function SuggestionsPage() {
 
   return <div className={s.root}>
     <a className={s.skip} href="#ideas">Skip to suggestions</a>
-    <header className={s.header}><a className={s.logo} href="/hub">ByDose<span> / BUILT TOGETHER</span></a><nav aria-label="ByDose navigation"><a href="/hub">ByDose home</a><a href="/community">DOSE Art / Your account ↗</a></nav></header>
+    <header className={s.header}><a className={s.logo} href="/hub">ByDose<span> / BUILT TOGETHER</span></a><nav aria-label="ByDose navigation"><a href="/hub">ByDose home</a><a href="/community">DOSE Art / Your account →</a></nav></header>
     <main className={s.main} id="ideas">
       <div className={s.intro}><p className={s.eyebrow}>HELP SHAPE WHAT COMES NEXT.</p><h1>SUGGEST<br /><span>AN IDEA.</span></h1><p>A design change, a missing feature, or a whole new direction. We’re listening.</p></div>
       {!ready && <p role="status">Opening the suggestion box…</p>}
