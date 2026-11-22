@@ -35,3 +35,9 @@ The six SVG artwork studies are original illustrations, not user submissions. Ba
 Apply **only** `supabase/migrations/202611220002_bydose_suggestions.sql` once to the existing preview database. It creates `bydose_suggestions` with self-only RLS and its own rate limit; it does not alter/delete old DOSE Art ideas, profiles or posts. Do not rerun the old bootstrap. Before this new table exists, the ByDose route shows an explicit setup-needed message and does not claim to save anything. If a network problem prevents checking the table, it also offers a retry.
 
 The owner previously reported signup, profile changes, artwork and DOSE Art suggestions working and persisting after refresh on the preview. The readiness flag is already enabled for the hub preview branch. Hosted two-account isolation and password recovery remain unverified. The new ByDose inbox needs its new migration and a real submission test.
+
+## DOSE Art main-feed placement
+
+Apply only `supabase/migrations/202611220003_art_feed_choice.sql` once to the existing database. It adds a boolean with a default of true, preserving existing posts in the main feed. The posting form offers **Show on DOSE Art’s main feed**, checked by default. Unchecked posts remain publicly visible on artist profiles and by image URL, but not in Discover. Both initial feed queries and pagination filter before applying the page range. This is not a privacy control. No existing post-editing feature is added.
+
+Until the new column is available, the checkbox is disabled with an explanation and posting retains its prior behavior. No old migration should be rerun. Hosted authenticated submission and pagination still require an ordinary account check after the migration.

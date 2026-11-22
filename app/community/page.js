@@ -31,6 +31,7 @@ function Avatar({ profile, supabase }) {
 export default function CommunityPage() {
   const [supabase, setSupabase] = useState(null);
   const [ready, setReady] = useState(false);
+  const [feedChoiceReady, setFeedChoiceReady] = useState(false);
   const [user, setUser] = useState(null);
   const [myProfile, setMyProfile] = useState(null);
   const [artist, setArtist] = useState(null);
@@ -125,6 +126,7 @@ export default function CommunityPage() {
       .order("id", { ascending: false })
       .range(0, pageSize - 1);
     if (artist) query = query.eq("artist_id", artist.id);
+    else if (feedChoiceReady) query = query.eq("show_in_feed", true);
     query.then(({ data, error: feedError }) => {
       if (!active || version !== queryVersion.current) return;
       if (feedError)
@@ -140,7 +142,16 @@ export default function CommunityPage() {
     return () => {
       active = false;
     };
-  }, [supabase, view, artist, refresh]);
+  }, [supabase, view, artist, refresh, feedChoiceReady]);
+
+  useEffect(() => {
+    let active = true;
+    if (!supabase) return;
+    supabase.from("posts").select("show_in_feed").limit(0).then(({ error }) => {
+      if (active) setFeedChoiceReady(!error);
+    });
+    return () => { active = false; };
+  }, [supabase, refresh]);
 
   function go(next, nextArtist = null) {
     setError("");
@@ -311,6 +322,7 @@ export default function CommunityPage() {
           medium: data.get("medium"),
           alt_text: data.get("alt_text").trim(),
           image_path: path,
+          ...(feedChoiceReady ? { show_in_feed: data.get("show_in_feed") === "on" } : {}),
         });
       if (error) {
         const { error: cleanupError } = await supabase.storage
@@ -325,7 +337,9 @@ export default function CommunityPage() {
       form.reset();
       go("gallery", myProfile);
       setRefresh((n) => n + 1);
-      setMessage("Your artwork is published to your gallery.");
+      setMessage(feedChoiceReady && !data.get("show_in_feed")
+        ? "Your artwork is published to your artist profile only—not the DOSE Art main feed. It is still public."
+        : "Your artwork is published to your artist profile and DOSE Art’s main feed.");
     });
   }
 
@@ -365,6 +379,7 @@ export default function CommunityPage() {
         .order("id", { ascending: false })
         .range(posts.length, posts.length + pageSize - 1);
       if (artist) query = query.eq("artist_id", artist.id);
+      else if (feedChoiceReady) query = query.eq("show_in_feed", true);
       const { data, error } = await query;
       if (version !== queryVersion.current) return;
       if (error) throw new Error("Could not load more artwork. Try again.");
@@ -694,6 +709,11 @@ export default function CommunityPage() {
                         required
                       />
                     </label>
+                    <label className={s.checkbox}>
+                      <input type="checkbox" name="show_in_feed" defaultChecked disabled={!feedChoiceReady} />
+                      <span>Show on DOSE Art’s main feed<small style={{ display: "block" }}>Uncheck to show this artwork only on your artist profile. Profile-only posts and image URLs are still public, not private.</small></span>
+                    </label>
+                    {!feedChoiceReady && <p className={s.small}>The feed choice needs the site owner’s database update, or a connection retry. Until available, posts appear on both your profile and the main feed, as before.</p>}
                     <label className={s.checkbox}>
                       <input type="checkbox" name="rights" required />I made
                       this artwork or have permission to publish it, and

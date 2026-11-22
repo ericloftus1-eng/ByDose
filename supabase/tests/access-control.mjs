@@ -268,6 +268,18 @@ try {
   await db.exec(`update public.bydose_suggestions set created_at=now()-interval '25 hours' where author_id='${A}'`);
   await as("authenticated", A, byDoseIdea(A));
   assert.deepEqual((await db.query("select * from public.site_suggestions order by id")).rows, oldIdeas.rows);
+  const beforeFeedChange = (await db.query("select count(*)::int as n from public.posts")).rows[0].n;
+  await db.exec(await readFile(new URL("../migrations/202611220003_art_feed_choice.sql", import.meta.url), "utf8"));
+  assert.equal((await db.query("select count(*)::int as n from public.posts where show_in_feed=true")).rows[0].n, beforeFeedChange);
+  await as("authenticated", A, `insert into storage.objects(bucket_id,name,owner_id) values ('dose-artwork','${image}','${A}')`);
+  const profileOnly = insertPost(A, image).replace("image_path)", "image_path,show_in_feed)").replace(`'${image}')`, `'${image}',false)`);
+  await denied("anon", null, profileOnly);
+  await denied("authenticated", B, profileOnly);
+  await as("authenticated", A, profileOnly);
+  assert.equal((await as("anon", null, "select * from public.posts where show_in_feed=true")).rows.length, beforeFeedChange);
+  assert.equal((await as("anon", null, `select * from public.posts where artist_id='${A}' and show_in_feed=false`)).rows.length, 1);
+  await denied("authenticated", B, `update public.posts set show_in_feed=true where artist_id='${A}'`);
+  console.log("PASS: feed-choice migration preserves old posts; profile-only public posts excluded by main-feed query; anonymous and spoofed writes denied.");
   console.log("PASS: separate ByDose inbox, preserved DOSE Art records, own-only reads/writes, independent rate limits, status spoofing/anonymous denials and expiry.");
   console.log("PASS: private suggestion insert/read ownership, anonymous/cross-user/spoofed-status denials, blank titles, five-per-day limit, independent user limits, and rolling expiry.");
   console.log(
