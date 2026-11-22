@@ -1,6 +1,6 @@
 # DOSE Art Collective
 
-An art-first social community layout built with Next.js and React.
+A street-art-first social community design demo built with Next.js and React. Graffiti, murals, and blackbooks lead the feed; painting, digital art, and photography remain welcome.
 
 ## Run locally
 
@@ -15,13 +15,13 @@ Use `npm run build` for the production build and `npm start` to serve it.
 
 ## Routes
 
-- `/`: responsive social feed, medium and search filters, following feed, saved pieces, artist profiles, and a demo studio.
+- `/`: responsive social feed, graffiti/mural/blackbook and other medium filters, search, following feed, saved pieces, artist profiles, and a demo studio.
 - `/intro`: the original animated DOSE experience and collective entry.
 - `/collection`: the existing Secret Nine project concept, with artist entries still closed.
 
 ## Preview behavior
 
-All artists and feed posts are fictional sample content. The three SVG studies in `public/art` are original layout illustrations; the Photography card is an illustrated placeholder, not a photograph or a submitted artwork.
+All artists and feed posts are fictional sample content. The six SVG studies in `public/art` are original layout illustrations; the Photography card is an illustrated placeholder, not a photograph or a submitted artwork.
 
 Likes, saves, follows, comments, and composer posts work only in memory and reset on reload. The composer selects sample illustrations; it does not upload files or publish publicly. There is no authentication, database, messaging, or real social network yet.
 
@@ -31,6 +31,8 @@ Likes, saves, follows, comments, and composer posts work only in memory and rese
 - `app/social.module.css`: responsive, scoped social styles
 - `app/intro/page.js` and `app/globals.css`: original intro
 - `app/art.js` and `app/art.css`: Secret Nine concept
+
+The condensed display type is self-hosted Barlow Condensed (900 Latin), distributed under the SIL Open Font License; see `public/fonts/OFL.txt`. No runtime font service is used.
 
 ## Checks
 
