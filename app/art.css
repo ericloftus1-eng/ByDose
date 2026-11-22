@@ -1,0 +1,74 @@
+/* A covered exhibition: the silhouettes are placeholders, never hidden artwork. */
+.secret-nine { margin-top: 24px; padding: clamp(22px, 4vw, 40px); border: 1px solid #735136; background: linear-gradient(145deg, #211721f5, #100d0cfb 55%, #21160ff5); color: #eadccc; }
+.nine-topline { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 22px; border-bottom: 1px solid #88643b66; color: #c9b49d; font: .6rem/1.6 Arial, sans-serif; letter-spacing: .14em; text-transform: uppercase; }
+.nine-status { border: 1px solid #a78b6066; border-radius: 20px; padding: 5px 10px; color: #e0bf85; }
+.nine-status::before { content: ""; display: inline-block; width: 5px; height: 5px; margin-right: 7px; border-radius: 50%; background: #e0bf85; vertical-align: middle; }
+.nine-heading { display: flex; align-items: center; justify-content: space-between; gap: 22px; margin-top: 30px; }
+.nine-eyebrow { color: #d5ad6c; font: .6rem/1.8 Arial, sans-serif; letter-spacing: .15em; text-transform: uppercase; }
+.nine-heading h2 { margin: 12px 0 18px; color: #f4dfb6; font: 400 clamp(2.5rem, 6vw, 4.1rem)/1.02 Georgia, serif; letter-spacing: -.055em; }
+.nine-heading h2 em { color: #d6ac68; }
+.nine-deck { font: 1.12rem/1.5 Georgia, serif; }
+.reveal-stamp { flex: 0 0 128px; padding: 20px 8px; border: 1px solid #ad814c; outline: 1px solid #735136; outline-offset: -6px; text-align: center; transform: rotate(3deg); color: #dabe8a; }
+.reveal-stamp > span { display: block; font: .52rem/1.7 Arial, sans-serif; text-transform: uppercase; letter-spacing: .1em; }
+.reveal-stamp strong { display: block; margin: 12px 0; font: 2.4rem/.95 Georgia, serif; letter-spacing: -.04em; }
+.reveal-stamp strong span { display: block; margin-top: 8px; font: .85rem/1.2 Arial, sans-serif; letter-spacing: .25em; text-indent: .25em; }
+.nine-intro { max-width: 510px; margin-top: 24px; color: #c8b9ab; font: .98rem/1.8 Georgia, serif; }
+.nine-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin: 24px 0 34px; }
+.nine-actions a { display: inline-flex; align-items: center; gap: 20px; min-height: 46px; text-decoration: none; font: .75rem/1.4 Arial, sans-serif; }
+.nine-primary { padding: 12px 18px; border: 1px solid #ddb77a; background: #ddb77a; color: #1a120c; }
+.nine-primary:hover { background: #f0cf99; }
+.nine-secondary { color: #dfc296; border-bottom: 1px solid #866440; }
+.secret-nine a:focus-visible, .secret-nine summary:focus-visible { outline: 2px solid #ffe1a0; outline-offset: 5px; }
+.covered-gallery { margin: 0; padding: 28px 18px 16px; border: 1px solid #88643b55; background: radial-gradient(ellipse at center, #55363c44, transparent 70%), #0a080ac9; }
+.board-lineup { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); align-items: center; gap: clamp(6px, 1.5vw, 15px); }
+.board-slot { display: grid; justify-items: center; gap: 16px; }
+.secret-board { position: relative; width: 100%; max-width: 57px; aspect-ratio: 1 / 4; border: 1px solid #ac854c; border-radius: 45% 45% 43% 43% / 16% 16% 17% 17%; background: linear-gradient(95deg, #151114, #33232d 45%, #1d151b 65%, #0c0b0e); box-shadow: inset 3px 0 0 #c29c5522, 5px 8px 15px #0008; transform: translateY(calc((var(--board-index) - 4) * -1px)) rotate(-3deg); }
+.board-slot:nth-child(even) .secret-board { transform: rotate(3deg); background: linear-gradient(95deg, #17130f, #34291e 45%, #1d1710 65%, #0c0b0e); }
+.board-seal { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #c7a268; font: .8rem Georgia, serif; white-space: nowrap; }
+.board-seal > span { margin: 0 2px; color: #7c603c; }
+.board-bolts { position: absolute; left: calc(50% - 4px); width: 8px; height: 9px; border: 2px dotted #b58e5866; }
+.board-bolts-top { top: 13%; }
+.board-bolts-bottom { bottom: 13%; }
+.board-number { color: #bba07a; font: .6rem Arial, sans-serif; letter-spacing: .15em; }
+.covered-gallery figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin-top: 24px; padding-top: 14px; border-top: 1px solid #88643b44; color: #b6a694; font: .62rem/1.7 Arial, sans-serif; }
+.artist-call { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin: 40px 0; scroll-margin-top: 24px; }
+.secret-nine h3 { color: #f0d8ae; font: 400 1.65rem/1.2 Georgia, serif; letter-spacing: -.025em; }
+.artist-call h3 { margin: 14px 0; }
+.artist-call-copy > p:not(.nine-eyebrow) { color: #c8b9ab; font: .86rem/1.8 Georgia, serif; }
+.artist-call-copy > p.entries-status { display: inline-block; margin-top: 18px; color: #e4bd7f; font: .7rem/1.6 Arial, sans-serif; border-left: 2px solid #ba925b; padding-left: 10px; }
+.artist-call-copy > p.contest-note { margin-top: 12px; color: #b6a694; font: .7rem/1.7 Arial, sans-serif; }
+.artist-details details { border-bottom: 1px solid #88643b66; }
+.artist-details summary { position: relative; padding: 20px 18px 20px 0; color: #e2cba5; font: .9rem/1.6 Georgia, serif; cursor: pointer; }
+.artist-details details p { padding: 0 0 20px; color: #c8b9ab; font: .82rem/1.8 Georgia, serif; }
+.reveal-road { scroll-margin-top: 24px; padding-top: 30px; border-top: 1px solid #88643b66; }
+.reveal-road h3 { margin-top: 10px; }
+.reveal-road ol { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 24px; }
+.stage-number { display: inline-block; color: #b68a50; font: italic 1.5rem/1 Georgia, serif; }
+.stage-month { margin: 16px 0 10px; color: #d1ab70; font: .6rem/1.6 Arial, sans-serif; text-transform: uppercase; letter-spacing: .1em; }
+.reveal-road h4 { margin-bottom: 10px; color: #e2cba5; font: 400 1rem/1.4 Georgia, serif; }
+.reveal-road li > p:last-child { color: #c8b9ab; font: .8rem/1.8 Georgia, serif; }
+.reveal-note { margin-top: 24px; color: #b6a694; font: .7rem/1.8 Arial, sans-serif; }
+.art-welcome { display: flex; gap: 18px; margin-top: 30px; padding-top: 24px; border-top: 1px solid #88643b66; }
+.art-welcome > span { color: #d5ad6c; font-size: 2rem; }
+.art-welcome h3 { font-size: 1.1rem; }
+.art-welcome p { margin-top: 10px; color: #c8b9ab; font: .8rem/1.8 Georgia, serif; }
+@media (max-width: 600px) {
+  .secret-nine { padding: 24px 18px; }
+  .nine-heading { gap: 12px; }
+  .nine-heading h2 { font-size: clamp(2.1rem, 8vw, 3rem); max-width: 200px; }
+  .nine-heading h2 em { display: block; }
+  .nine-heading .nine-eyebrow { max-width: 150px; }
+  .nine-deck { font-size: .95rem; }
+  .reveal-stamp { flex-basis: 100px; padding: 18px 7px; }
+  .reveal-stamp > span { font-size: .46rem; letter-spacing: .03em; }
+  .reveal-stamp strong { font-size: 2rem; }
+  .covered-gallery { padding: 22px 16px 16px; }
+  .board-lineup { grid-template-columns: repeat(3, 1fr); gap: 24px 16px; }
+  .secret-board { max-width: 37px; }
+  .board-slot { gap: 9px; }
+  .board-seal { font-size: .65rem; }
+  .artist-call { grid-template-columns: 1fr; gap: 16px; margin: 30px 0; }
+  .reveal-road ol { grid-template-columns: 1fr; gap: 24px; }
+  .stage-month { margin-top: 10px; }
+  .art-welcome { gap: 12px; }
+}
