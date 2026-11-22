@@ -384,10 +384,10 @@ export default function CommunityPage() {
       </a>
       <header className={s.header}>
         <a href="/hub" className={s.logo}>
-          ByDose<span> / DOSE ART</span>
+          DOSE Art<span> / COMMUNITY</span>
         </a>
         <nav aria-label="Community navigation">
-          <a href="/hub">ByDose home</a><a href="/suggestions">Suggest an idea →</a>
+          <a href="/hub">Main home</a><a href="/suggestions">Suggest an idea →</a>
           <button disabled={!configured || busy} onClick={() => go("feed")}>
             Discover
           </button>
@@ -492,12 +492,12 @@ export default function CommunityPage() {
               <section className={s.panel}>
                 <h2>
                   {authMode === "signup"
-                    ? "Create your ByDose account."
+                    ? "Create your DOSE Art account."
                     : authMode === "reset"
                       ? "Find your way back."
                       : authMode === "newpassword"
                         ? "Choose a new password."
-                        : "Welcome back to ByDose."}
+                        : "Welcome back to DOSE Art."}
                 </h2>
                 <p className={s.small}>
                   Your profile, artwork, and captions will be public. Your email
