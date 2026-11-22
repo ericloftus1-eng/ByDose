@@ -247,6 +247,28 @@ try {
   await db.exec(`update public.site_suggestions set created_at=now()-interval '25 hours' where author_id='${A}'`);
   await as("authenticated", A, idea(A));
   assert.equal((await as("authenticated", A, "select * from public.site_suggestions")).rows.length, 6);
+  // Apply the new migration after existing rows to prove it preserves the art inbox.
+  const oldIdeas = await db.query("select * from public.site_suggestions order by id");
+  await db.exec(await readFile(new URL("../migrations/202611220002_bydose_suggestions.sql", import.meta.url), "utf8"));
+  assert.deepEqual((await db.query("select * from public.site_suggestions order by id")).rows, oldIdeas.rows);
+  const byDoseIdea = owner => `insert into public.bydose_suggestions(author_id,title,details,category) values ('${owner}','Future space','An idea beyond art','New space')`;
+  await denied("anon", null, byDoseIdea(A));
+  await denied("authenticated", B, byDoseIdea(A));
+  await denied("anon", null, "select * from public.bydose_suggestions");
+  const first = (await as("authenticated", A, byDoseIdea(A) + " returning id,status")).rows[0];
+  assert.equal(first.status, "Suggested");
+  assert.equal((await as("authenticated", B, "select * from public.bydose_suggestions")).rows.length, 0);
+  assert.equal((await as("authenticated", A, "select * from public.bydose_suggestions")).rows.length, 1);
+  await denied("authenticated", A, `update public.bydose_suggestions set status='Shipped' where id='${first.id}'`);
+  await denied("authenticated", A, `insert into public.bydose_suggestions(author_id,title,details,category,status) values ('${A}','Spoof','Invalid status','Feature','Shipped')`);
+  await denied("authenticated", A, `delete from public.bydose_suggestions where id='${first.id}'`);
+  for (let n = 0; n < 4; n++) await as("authenticated", A, byDoseIdea(A));
+  await denied("authenticated", A, byDoseIdea(A));
+  await as("authenticated", B, byDoseIdea(B));
+  await db.exec(`update public.bydose_suggestions set created_at=now()-interval '25 hours' where author_id='${A}'`);
+  await as("authenticated", A, byDoseIdea(A));
+  assert.deepEqual((await db.query("select * from public.site_suggestions order by id")).rows, oldIdeas.rows);
+  console.log("PASS: separate ByDose inbox, preserved DOSE Art records, own-only reads/writes, independent rate limits, status spoofing/anonymous denials and expiry.");
   console.log("PASS: private suggestion insert/read ownership, anonymous/cross-user/spoofed-status denials, blank titles, five-per-day limit, independent user limits, and rolling expiry.");
   console.log(
     "PASS: migration, public reads, automatic private-email-free profiles, self-only edits/uploads/posts/deletes, immutable assets, linked-asset deletion guards, bucket configuration.",

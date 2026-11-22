@@ -9,9 +9,10 @@ Node.js 20.9+; `npm ci`, `npm run dev`, `npm run test:foundation`, `npm run buil
 ## Routes
 
 - `/` and `/intro`: preserved animated DOSE mandala; **Enter ByDose** opens the umbrella landing page.
-- `/hub`: direct ByDose landing page, DOSE Art entrance, deliberately disabled coming-soon spaces, and **Suggest an idea**.
+- `/hub`: direct ByDose landing page, DOSE Art entrance, deliberately disabled coming-soon spaces, and **Help shape ByDose**.
 - `/community`: real account/profile/artwork integration foundation. Preview backend setup is still required, and controls stay unavailable until activated.
-- `/suggestions`: real private, authenticated suggestion form and own submission history; unavailable until backend activation. No pretend saving.
+- `/suggestions`: DOSE Art-only private suggestions and own submission history.
+- `/bydose-suggestions`: separate ByDose-branded inbox for the wider site and future spaces. Uses the same account, but a distinct private table and its own five-per-day limit.
 - `/art-preview`: street-first interactive design demo with fictional artists, six original SVG studies, graffiti/mural/blackbook filters, and memory-only likes/saves/follows/comments/composer. No real uploads; state resets on reload. Photography uses an illustrated placeholder, not a photograph.
 - `/collection`: preserved Secret Nine project concept; artist entries are not open.
 
@@ -28,3 +29,9 @@ Artwork/profiles and their media URLs are public; suggestions are private to the
 ## Assets
 
 The six SVG artwork studies are original illustrations, not user submissions. Barlow Condensed 900 Latin is self-hosted under the SIL Open Font License (`public/fonts/OFL.txt`). No external runtime font service is used.
+
+## Separate ByDose inbox activation
+
+Apply **only** `supabase/migrations/202611220002_bydose_suggestions.sql` once to the existing preview database. It creates `bydose_suggestions` with self-only RLS and its own rate limit; it does not alter/delete old DOSE Art ideas, profiles or posts. Do not rerun the old bootstrap. Before this new table exists, the ByDose route shows an explicit setup-needed message and does not claim to save anything. If a network problem prevents checking the table, it also offers a retry.
+
+The owner previously reported signup, profile changes, artwork and DOSE Art suggestions working and persisting after refresh on the preview. The readiness flag is already enabled for the hub preview branch. Hosted two-account isolation and password recovery remain unverified. The new ByDose inbox needs its new migration and a real submission test.
