@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getCommunityClient, mediaUrl, uploadImage } from "./client";
 import s from "./community.module.css";
+import PasswordField from "./password-field";
 import { filterArtworkQuery } from "./feed-query.mjs";
 
 const mediums = [
@@ -538,24 +539,7 @@ export default function CommunityPage() {
                         />
                       </label>
                     )}
-                    {authMode !== "reset" && (
-                      <label>
-                        Password
-                        <input
-                          type="password"
-                          name="password"
-                          autoComplete={
-                            authMode === "signin"
-                              ? "current-password"
-                              : "new-password"
-                          }
-                          required
-                          minLength={12}
-                          maxLength={128}
-                        />
-                        <small>At least 12 characters.</small>
-                      </label>
-                    )}
+                    {authMode !== "reset" && <PasswordField key={authMode} mode={authMode} />}
                     <button className={s.primary} type="submit">
                       {busy
                         ? "Please wait…"
