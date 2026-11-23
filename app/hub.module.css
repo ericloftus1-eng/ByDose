@@ -42,3 +42,12 @@
 .footer span { font: 9px/1.8 monospace; }
 @media(max-width: 700px) { .header { padding: 19px 20px; align-items: flex-start; flex-direction: column; gap: 14px; } .logo { font-size: 29px; } .logo span { font-size: 8px; } .header nav { width: 100%; justify-content: space-between; gap: 14px; font-size: 11px; } .main { padding: 22px 18px 35px; } .back { margin-bottom: 29px; } .eyebrow { font-size: 8px; letter-spacing: 1.2px; } .hub h1 { font-size: 59px; letter-spacing: -.5px; margin: 15px 0 20px; } .intro { font-size: 13px; margin-bottom: 28px; } .spaces { grid-template-columns: minmax(0, 1fr); gap: 18px; } .wall { height: 205px; } .cardCopy { padding: 22px 20px; } .cardCopy h2 { font-size: 47px; } .future { gap: 14px; } .shadow { padding: 21px; min-height: 180px; } .shadow strong { font-size: 32px; padding: 18px 0; } .invitation { flex-direction: column; align-items: flex-start; margin-top: 25px; padding: 27px 0; gap: 18px; } .invitation h2 { font-size: 25px; } }
 @media(max-width: 360px) { .hub h1 { font-size: 51px; } }
+
+.labelSpace { padding: 25px 27px; border: 1px solid #839756; background: #202719; }
+.labelMark { float: right; transform: rotate(8deg); background: #deff58; color: #17200d; border: 2px solid #11180b; padding: 10px 13px; margin: 7px 0 15px 15px; font: 900 27px/.88 "ByDose Display",Impact,sans-serif; }
+.labelMark span { font-size: 20px; letter-spacing: 1px; }
+.labelSpace h2 { font: 900 39px/1.1 "ByDose Display",Impact,sans-serif; margin: 19px 0 10px; }
+.labelSpace > p:not(.eyebrow) { font-size: 13px; color: #c0c9b0; margin-bottom: 20px; }
+.labelSpace .primary { clear: both; }
+.labelSpace small { display: block; font: 9px/1.7 monospace; color: #b6c49e; margin-top: 13px; }
+@media(max-width: 700px) { .labelSpace { padding: 23px 20px; } }

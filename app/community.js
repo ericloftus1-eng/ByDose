@@ -19,8 +19,8 @@ export default function ByDoseHub({ headingRef, onBack }) {
             <div className={s.wall} aria-hidden="true"><img src="/art/letters.svg" alt="" width="960" height="680" /><span>01 / ART · CULTURE · COMMUNITY</span></div>
             <div className={s.cardCopy}><p className={s.eyebrow}>THE FIRST SPACE</p><h2>DOSE ART<span>→</span></h2><p>From blackbooks to big walls. Street art leads; every way of making belongs.</p><div className={s.actions}><a className={s.primary} href="/community">Enter DOSE Art →</a></div><small>Real artist profiles and artwork. Email signup is currently limited while public email delivery is configured.</small></div>
           </article>
-          <div className={s.future} aria-label="Future ByDose spaces">
-            <button disabled className={s.shadow}><span>02 / STILL UNDER WRAPS</span><strong>SOMETHING<br />IS TAKING SHAPE.</strong><small>COMING SOON · NOT OPEN YET</small></button>
+          <div className={s.future} aria-label="More ByDose spaces">
+            <article className={s.labelSpace} aria-labelledby="dose-label-title"><p className={s.eyebrow}>02 / TOOLS FOR YOUR NEXT IDEA</p><div className={s.labelMark} aria-hidden="true">DOSE<br /><span>LABEL</span></div><h2 id="dose-label-title">DOSE LABEL</h2><p>Your label-making space.</p><a className={s.primary} href="https://doselabel.online">Open DOSE Label →</a><small>doselabel.online · Separate app</small></article>
             <button disabled className={s.shadow}><span>03 / ROOM FOR THE UNEXPECTED</span><strong>THE NEXT DOSE<span>?</span></strong><small>COMING SOON · NOT OPEN YET</small></button>
           </div>
         </div>
