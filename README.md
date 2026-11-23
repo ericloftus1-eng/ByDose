@@ -49,3 +49,11 @@ Open **Your look** above the community or DOSE Art suggestion page. Choose Aspha
 Only `/community` (including its profile, posting and account views) and `/suggestions` opt in. ByDose hub/feedback, mandala, collection concept, and fictional design demo retain their separate styling. Artwork images are not tinted or filtered. This is visitor appearance, not artist-controlled profiles, music or shared account settings. No database migration or environment change is needed.
 
 Run `node tests/appearance.mjs` for all nine preset combinations, storage/reset/invalid-data cases and contrast checks against the exact preset colors (4.5:1 normal text, 3:1 control boundaries). Visual and keyboard checks on a deployed preview still matter; these tests do not cover authenticated forms.
+
+## Connected street-art layout
+
+`/community` now uses the street-first three-column feed, with a responsive bottom navigation, real artist cards, preserved Auth/profile/upload forms and browser-local themes. `/art-preview` redirects to `/community`; the hub has one DOSE Art entrance. Fictional artists/posts and memory-only likes/follows/comments are removed from the normal path, not copied to the database. Real posts and profiles are unchanged.
+
+Medium filters and explicit title search execute server-side on initial and paginated queries. Search escapes SQL LIKE wildcard characters as literals. Artist galleries retain profile-only posts; main feed respects the existing placement field. No SQL migration is needed. Run `node tests/feed-query.mjs` along with the existing checks.
+
+General signup email remains blocked by provider configuration, not solved by the layout: the owner must configure a verified sender/custom SMTP in Supabase. No confirmations have been disabled and no provider credentials are requested in chat. Before distributing public QR stickers, test signup/confirmation/reset with an ordinary non-team inbox, plus ownership/abuse/privacy safeguards. No test accounts or auth bypasses are included.

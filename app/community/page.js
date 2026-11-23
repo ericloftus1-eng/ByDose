@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getCommunityClient, mediaUrl, uploadImage } from "./client";
 import s from "./community.module.css";
+import { filterArtworkQuery } from "./feed-query.mjs";
 
 const mediums = [
   "Graffiti",
@@ -38,6 +39,9 @@ export default function CommunityPage() {
   const [view, setView] = useState("feed");
   const [authMode, setAuthMode] = useState("signin");
   const [posts, setPosts] = useState([]);
+  const [mediumFilter, setMediumFilter] = useState("All work");
+  const [search, setSearch] = useState("");
+  const [searchInput, setSearchInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -125,8 +129,7 @@ export default function CommunityPage() {
       .order("created_at", { ascending: false })
       .order("id", { ascending: false })
       .range(0, pageSize - 1);
-    if (artist) query = query.eq("artist_id", artist.id);
-    else if (feedChoiceReady) query = query.eq("show_in_feed", true);
+    query = filterArtworkQuery(query, { artist, feedChoiceReady, medium: mediumFilter, search });
     query.then(({ data, error: feedError }) => {
       if (!active || version !== queryVersion.current) return;
       if (feedError)
@@ -142,7 +145,7 @@ export default function CommunityPage() {
     return () => {
       active = false;
     };
-  }, [supabase, view, artist, refresh, feedChoiceReady]);
+  }, [supabase, view, artist, refresh, feedChoiceReady, mediumFilter, search]);
 
   useEffect(() => {
     let active = true;
@@ -159,6 +162,7 @@ export default function CommunityPage() {
     setArtist(nextArtist);
     setView(next);
     setDeleting(null);
+    setSearch(""); setSearchInput(""); setMediumFilter("All work");
   }
   function requireUser(next) {
     if (user) go(next);
@@ -378,8 +382,7 @@ export default function CommunityPage() {
         .order("created_at", { ascending: false })
         .order("id", { ascending: false })
         .range(posts.length, posts.length + pageSize - 1);
-      if (artist) query = query.eq("artist_id", artist.id);
-      else if (feedChoiceReady) query = query.eq("show_in_feed", true);
+      query = filterArtworkQuery(query, { artist, feedChoiceReady, medium: mediumFilter, search });
       const { data, error } = await query;
       if (version !== queryVersion.current) return;
       if (error) throw new Error("Could not load more artwork. Try again.");
@@ -398,24 +401,14 @@ export default function CommunityPage() {
         Skip to community
       </a>
       <header className={s.header}>
-        <a href="/hub" className={s.logo}>
-          DOSE Art<span> / COMMUNITY</span>
-        </a>
+        <a href="/community" className={s.logo}>DOSE<span>ART · CULTURE · COMMUNITY</span></a>
+        <form className={s.search} role="search" onSubmit={event => { event.preventDefault(); setSearch(searchInput.trim()); }}>
+          <label className={s.srOnly} htmlFor="art-search">Search artwork titles</label>
+          <input id="art-search" type="search" value={searchInput} placeholder="Search artwork titles" onChange={event => { setSearchInput(event.target.value); if (!event.target.value) setSearch(""); }} />
+          <button type="submit" disabled={!configured || busy}>Search</button>
+        </form>
         <nav aria-label="Community navigation">
-          <a href="/hub">Main home</a><a href="/suggestions">Suggest an idea →</a>
-          <button disabled={!configured || busy} onClick={() => go("feed")}>
-            Discover
-          </button>
-          <button
-            disabled={!configured || busy}
-            onClick={() =>
-              user && myProfile
-                ? go("gallery", myProfile)
-                : requireUser("profile")
-            }
-          >
-            My studio
-          </button>
+          <a href="/suggestions">Suggest an idea</a>
           {user && <button disabled={busy || !myProfile} onClick={() => go("profile")}>Edit profile</button>}
           {user ? (
             <button
@@ -453,6 +446,17 @@ export default function CommunityPage() {
           </button>
         </nav>
       </header>
+      <div className={s.shell}>
+        <aside className={s.sidebar}>
+          <p className={s.eyebrow}>FROM THE GROUND UP</p>
+          <nav aria-label="Artwork navigation">
+            <button aria-current={view === "feed" ? "page" : undefined} disabled={!configured || busy} onClick={() => go("feed")}>Feed <span>↗</span></button>
+            <button aria-current={view === "gallery" && artist?.id === user?.id ? "page" : undefined} disabled={!configured || busy} onClick={() => user && myProfile ? go("gallery", myProfile) : requireUser("profile")}>My studio <span>↗</span></button>
+            <button className={s.primary} disabled={!configured || busy} onClick={() => requireUser("post")}>+ Drop a piece</button>
+          </nav>
+          <div className={s.sideManifesto}><span aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M12 2v20M2 12h20M5 5l14 14M5 19 19 5" /></svg></span><p>ROOTS IN THE STREET.<br />ROOM FOR EVERYONE.</p><a href="/intro">The DOSE experience →</a></div>
+          <div className={s.sideLinks}><a href="/suggestions">Suggest an idea →</a><a href="/hub">ByDose home →</a><p>Independent art.<br />Shared ground.</p></div>
+        </aside>
       <main id="community-content" className={s.main}>
         <div className={s.intro}>
           <p className={s.eyebrow}>STREET ROOTS. EVERY STYLE WELCOME.</p>
@@ -461,8 +465,10 @@ export default function CommunityPage() {
             <br />
             MARK<span>.</span>
           </h1>
-          <p>From blackbooks to big walls. Art is the beginning, not the limit.</p>
+          <p>From blackbooks to big walls. A home for street art and every other way you make your mark.</p>
+          <span className={s.heroSticker} aria-hidden="true">RAW<br />BY<br />DESIGN.</span>
         </div>
+        <div className={s.communityNote}>ORIGINAL WORK. REAL ARTISTS. <span>Street roots · Every style welcome</span></div>
         {!ready && <p role="status">Opening the studio…</p>}
         {ready && !supabase && (
           <section className={s.setup}>
@@ -516,7 +522,7 @@ export default function CommunityPage() {
                 </h2>
                 <p className={s.small}>
                   Your profile, artwork, and captions will be public. Your email
-                  is not part of your public profile.
+                  is not part of your public profile. New-account confirmation emails are currently restricted while public email delivery is configured. Existing members can sign in.
                 </p>
                 <form onSubmit={authenticate} key={authMode}>
                   <fieldset disabled={busy}>
@@ -762,7 +768,7 @@ export default function CommunityPage() {
                 )}
                 <div className={s.sectionTitle}>
                   <h2>
-                    {artist ? "From the studio" : "Fresh from the community"}
+                    {artist ? "From the studio" : "Latest drops"}
                   </h2>
                   <div className={s.feedActions}>
                     {(!artist || user?.id === artist.id) && <button
@@ -781,6 +787,8 @@ export default function CommunityPage() {
                   </button>
                   </div>
                 </div>
+                <div className={s.filters} aria-label="Filter artwork by medium">{["All work", ...mediums].map(medium => <button key={medium} disabled={busy} aria-pressed={mediumFilter === medium} onClick={() => setMediumFilter(medium)}>{medium}</button>)}</div>
+                {search && <p className={s.small}>Artwork titles matching “{search}” <button onClick={() => { setSearch(""); setSearchInput(""); }}>Clear search</button></p>}
                 {loading ? (
                   <p role="status">Gathering a little inspiration…</p>
                 ) : !posts.length ? (
@@ -789,13 +797,13 @@ export default function CommunityPage() {
                       {error
                         ? "The gallery is unavailable."
                         : artist
-                          ? "A fresh canvas."
-                          : "Be here at the beginning."}
+                          ? "No artwork matches this view."
+                          : "No artwork here yet."}
                     </h3>
                     <p>
                       {error
                         ? "Please retry after the database connection is ready."
-                        : "No artwork yet. The first real posts will appear here—no fictional accounts mixed in."}
+                        : search || mediumFilter !== "All work" ? "Try another title or medium. Filters apply across all pages, not just the posts already loaded." : "Share the first piece. This feed contains real community artwork—not fictional sample posts."}
                     </p>
                     <button
                       className={s.primary}
@@ -917,8 +925,14 @@ export default function CommunityPage() {
           </>
         )}
       </main>
+      <aside className={s.rightbar}>
+        <section className={s.radar}><p className={s.eyebrow}>FIND YOUR PEOPLE</p><h2>Different hands.<br />Shared ground.</h2><p>Open an artist’s name above a piece to explore their real studio. No fictional profiles in this feed.</p></section>
+        <section className={s.projectCard}><p className={s.eyebrow}>FROM THE COLLECTIVE / 01–09</p><div className={s.boards} aria-hidden="true">{[0,1,2,3,4].map(n => <span key={n} style={{ "--n": n }} />)}</div><p className={s.eyebrow}>NINE BOARDS. DIFFERENT HANDS.</p><h2>THE SECRET<br />NINE.</h2><p>A second life for old decks.<br />A new canvas for original voices.</p><a href="/collection">Explore the project →</a><small>Planned concept · Artist entries are not open.</small></section>
+        <section className={s.prompt}><p className={s.eyebrow}>OPEN BLACKBOOK</p><h2>SHOW THE WORK.<br />NOT JUST THE FINISH.</h2><p>Rough sketches. New outlines.<br />The in-between belongs here, too.</p><button disabled={!configured || busy} onClick={() => requireUser("post")}>Share a work in progress →</button></section>
+      </aside>
+      </div>
       <footer className={s.bottom}>
-        <a href="/art-preview">Design demo</a>
+        <a href="/hub">ByDose home</a>
         <a href="/collection">The Secret Nine</a>
         <a href="/intro">The DOSE experience</a>
       </footer>
