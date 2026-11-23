@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "DOSE — Art is a social thing",
-  description: "A first look at the DOSE art community. Share what you make, discover original voices, and find your creative people.",
+  title: "ByDose — A little intention. A world of possibility.",
+  description: "Street roots. Open possibilities. Explore DOSE Art, make your mark, and help shape what ByDose becomes.",
 };
 
 export default function RootLayout({ children }) {

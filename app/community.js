@@ -1,57 +1,32 @@
 "use client";
 
-import { useState } from "react";
-import Art from "./art";
+import s from "./hub.module.css";
 
-const meanings = [
-  {
-    word: "Art",
-    line: "Leave a little of yourself in the world.",
-    description: "Art is how we turn what we feel into something we can share. A marker line, a painted deck, a photograph, a wild first attempt — it all belongs here. You don’t need a perfect piece. Just the urge to make something that is yours, with respect for other people’s work and spaces.",
-    invitation: "Make it. Experiment. Share the process.",
-  },
-  {
-    word: "Culture",
-    line: "What we make becomes how we move.",
-    description: "Culture is the living mix around the art: the music playing while you paint, the stories behind the marks, the places and people that shape your style. At Dose, we celebrate original voices, respect the roots, and leave room for something unexpected. We build it together, one exchange at a time.",
-    invitation: "Honor the roots. Remix the everyday. Stay curious.",
-  },
-  {
-    word: "Community",
-    line: "Different hands. Shared energy.",
-    description: "Community means there is space for you here — whether you have been creating for years or just picked up your first marker. Dose is about trading ideas, sharing tools, lifting each other up, and turning a solo spark into a collaboration. No gatekeeping. Just people making room for people.",
-    invitation: "Pull up. Trade ideas. Help someone grow.",
-  },
-];
-
-export default function Community({ headingRef, onBack }) {
-  const [selected, setSelected] = useState("Art");
-  const meaning = meanings.find(item => item.word === selected);
-
+export default function ByDoseHub({ headingRef, onBack }) {
   return (
-    <section className="collective" aria-labelledby="collective-title">
-      <button className="back-button" onClick={onBack}>← Back to the intro</button>
-      <header>
-        <p className="collective-eyebrow">Artists · Makers · The painted world</p>
-        <h1 className="collective-title" id="collective-title" ref={headingRef} tabIndex={-1}>DOSE ART<span>COLLECTIVE</span></h1>
-        <p className="collective-intro">A little intention. A little chaos. Something we make together.</p>
+    <section className={s.hub} aria-labelledby="bydose-title">
+      <header className={s.header}>
+        <a href="/hub" className={s.logo}>ByDose<span> / IN THE MAKING</span></a>
+        <nav aria-label="ByDose navigation"><a href="/bydose-suggestions">Help shape ByDose →</a><a href="/community">Your account →</a></nav>
       </header>
-      <div className="meaning-buttons" role="group" aria-label="Explore what Dose means">
-        {meanings.map(item => (
-          <button key={item.word} aria-pressed={selected === item.word} aria-controls="meaning-panel" onClick={() => setSelected(item.word)}>{item.word}</button>
-        ))}
-      </div>
-      <div id="meaning-panel">
-        {selected === "Art" ? <Art /> : (
-          <article className="meaning-panel" aria-live="polite" aria-atomic="true">
-            <p className="meaning-label">{meaning.word} / In the Dose community</p>
-            <h2>{meaning.line}</h2>
-            <p>{meaning.description}</p>
-            <p className="meaning-invitation">{meaning.invitation}</p>
+      <div className={s.main}>
+        {onBack ? <button className={s.back} onClick={onBack}>← Back to the mandala</button> : <a className={s.back} href="/">← Back to the mandala</a>}
+        <p className={s.eyebrow}>A LITTLE INTENTION. ROOM TO GROW.</p>
+        <h1 id="bydose-title" ref={headingRef} tabIndex={-1}>NOT ONE THING.<br /><span>JUST THE START.</span></h1>
+        <p className={s.intro}>ByDose is a place for ideas to take shape. We’re starting with art, rooted in the street. Where it goes next? Help us build it.</p>
+        <div className={s.spaces}>
+          <article className={s.artSpace}>
+            <div className={s.wall} aria-hidden="true"><img src="/art/letters.svg" alt="" width="960" height="680" /><span>01 / ART · CULTURE · COMMUNITY</span></div>
+            <div className={s.cardCopy}><p className={s.eyebrow}>THE FIRST SPACE</p><h2>DOSE ART<span>→</span></h2><p>From blackbooks to big walls. Street art leads; every way of making belongs.</p><div className={s.actions}><a className={s.primary} href="/community">Enter DOSE Art →</a></div><small>Real artist profiles and artwork. Email signup is currently limited while public email delivery is configured.</small></div>
           </article>
-        )}
+          <div className={s.future} aria-label="More ByDose spaces">
+            <article className={s.labelSpace} aria-labelledby="dose-label-title"><p className={s.eyebrow}>02 / TOOLS FOR YOUR NEXT IDEA</p><div className={s.labelMark} aria-hidden="true">DOSE<br /><span>LABEL</span></div><h2 id="dose-label-title">DOSE LABEL</h2><p>Your label-making space.</p><a className={s.primary} href="https://doselabel.online">Open DOSE Label →</a><small>doselabel.online · Separate app</small></article>
+            <button disabled className={s.shadow}><span>03 / ROOM FOR THE UNEXPECTED</span><strong>THE NEXT DOSE<span>?</span></strong><small>COMING SOON · NOT OPEN YET</small></button>
+          </div>
+        </div>
+        <section className={s.invitation}><div><p className={s.eyebrow}>BUILT WITH THE PEOPLE WHO USE IT.</p><h2>Got an idea for ByDose?</h2><p>A better layout. A missing feature. Something we haven’t thought of.</p></div><a className={s.primary} href="/bydose-suggestions">Help shape ByDose →</a></section>
+        <footer className={s.footer}>Art is the beginning. Not the limit.<span>BYDOSE / STILL BECOMING.</span></footer>
       </div>
-      <p className="collective-footer">Make your mark. Make room for others.</p>
     </section>
   );
 }
