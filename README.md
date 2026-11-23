@@ -41,3 +41,11 @@ The owner previously reported signup, profile changes, artwork and DOSE Art sugg
 Apply only `supabase/migrations/202611220003_art_feed_choice.sql` once to the existing database. It adds a boolean with a default of true, preserving existing posts in the main feed. The posting form offers **Show on DOSE Art’s main feed**, checked by default. Unchecked posts remain publicly visible on artist profiles and by image URL, but not in Discover. Both initial feed queries and pagination filter before applying the page range. This is not a privacy control. No existing post-editing feature is added.
 
 Until the new column is available, the checkbox is disabled with an explanation and posting retains its prior behavior. No old migration should be rerun. Hosted authenticated submission and pagination still require an ordinary account check after the migration.
+
+## DOSE Art visitor appearance
+
+Open **Your look** above the community or DOSE Art suggestion page. Choose Asphalt, Paper or After Hours independently of the Bold, Clean or Typewriter font. **Reset look** restores Asphalt/Bold. Choices are browser-local (`dose-art-appearance-v1`), work signed out, survive reload/navigation, and sync across tabs when browser storage permits. Blocked storage still permits a temporary in-memory choice and displays an honest save notice. Invalid stored values fall back to known presets.
+
+Only `/community` (including its profile, posting and account views) and `/suggestions` opt in. ByDose hub/feedback, mandala, collection concept, and fictional design demo retain their separate styling. Artwork images are not tinted or filtered. This is visitor appearance, not artist-controlled profiles, music or shared account settings. No database migration or environment change is needed.
+
+Run `node tests/appearance.mjs` for all nine preset combinations, storage/reset/invalid-data cases and contrast checks against the exact preset colors (4.5:1 normal text, 3:1 control boundaries). Visual and keyboard checks on a deployed preview still matter; these tests do not cover authenticated forms.
