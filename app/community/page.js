@@ -450,8 +450,8 @@ export default function CommunityPage() {
         <aside className={s.sidebar}>
           <p className={s.eyebrow}>FROM THE GROUND UP</p>
           <nav aria-label="Artwork navigation">
-            <button aria-current={view === "feed" ? "page" : undefined} disabled={!configured || busy} onClick={() => go("feed")}>Feed <span>↗</span></button>
-            <button aria-current={view === "gallery" && artist?.id === user?.id ? "page" : undefined} disabled={!configured || busy} onClick={() => user && myProfile ? go("gallery", myProfile) : requireUser("profile")}>My studio <span>↗</span></button>
+            <button aria-current={view === "feed" ? "page" : undefined} disabled={!configured || busy} onClick={() => go("feed")}>Feed <span>→</span></button>
+            <button aria-current={view === "gallery" && artist?.id === user?.id ? "page" : undefined} disabled={!configured || busy} onClick={() => user && myProfile ? go("gallery", myProfile) : requireUser("profile")}>My studio <span>→</span></button>
             <button className={s.primary} disabled={!configured || busy} onClick={() => requireUser("post")}>+ Drop a piece</button>
           </nav>
           <div className={s.sideManifesto}><span aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M12 2v20M2 12h20M5 5l14 14M5 19 19 5" /></svg></span><p>ROOTS IN THE STREET.<br />ROOM FOR EVERYONE.</p><a href="/intro">The DOSE experience →</a></div>
@@ -783,7 +783,7 @@ export default function CommunityPage() {
                       setRefresh((n) => n + 1);
                     }}
                   >
-                    Refresh ↻
+                    Refresh
                   </button>
                   </div>
                 </div>

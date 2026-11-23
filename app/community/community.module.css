@@ -556,7 +556,7 @@
 .radar { margin-bottom: 30px; }
 .radar h2 { font-size: 20px; margin: 13px 0; }
 .radar > p:last-child, .prompt > p:last-of-type { color: var(--muted); font-size: 11px; }
-.projectCard { background: var(--dose-accent, #deff58); color: var(--dose-ink, #202719); padding: 19px; transform: rotate(-1deg); }
+.projectCard { background: #d6dac0; color: #202719; padding: 19px; transform: rotate(-1deg); }
 .projectCard .eyebrow { color: inherit; font-size: 7px; letter-spacing: 1px; }
 .projectCard h2 { font: 900 36px/.98 "ByDose Display", Impact,sans-serif; margin: 15px 0; }
 .projectCard > p:not(.eyebrow) { font-size: 11px; }
