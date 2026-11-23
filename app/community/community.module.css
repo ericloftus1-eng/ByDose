@@ -499,3 +499,6 @@
 .suggestion p { color: #c1ccb3; white-space: pre-wrap; overflow-wrap: anywhere; }
 .suggestion time { display: block; color: var(--muted); font: 10px/1.7 monospace; margin-top: 12px; }
 @media(max-width: 720px) { .header nav { justify-content: flex-start; } .root h1 { font-size: 64px; } .logo span { font-size: 9px; } }
+
+.feedActions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+@media (max-width: 720px) { .sectionTitle { flex-wrap: wrap; gap: 10px; } .sectionTitle h2 { margin-bottom: 0; } .feedActions { gap: 16px; } .feedActions .primary { font-size: 12px; } }

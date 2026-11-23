@@ -764,6 +764,12 @@ export default function CommunityPage() {
                   <h2>
                     {artist ? "From the studio" : "Fresh from the community"}
                   </h2>
+                  <div className={s.feedActions}>
+                    {(!artist || user?.id === artist.id) && <button
+                      className={s.primary}
+                      disabled={busy}
+                      onClick={() => requireUser("post")}
+                    >Share artwork +</button>}
                   <button
                     disabled={loading || busy}
                     onClick={() => {
@@ -773,6 +779,7 @@ export default function CommunityPage() {
                   >
                     Refresh ↻
                   </button>
+                  </div>
                 </div>
                 {loading ? (
                   <p role="status">Gathering a little inspiration…</p>
